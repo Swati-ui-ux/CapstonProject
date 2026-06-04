@@ -1,15 +1,13 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+    
   return (
     <nav className="bg-white shadow-md px-8 py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         
-        {/* Logo */}
-        <h1 className="text-2xl font-bold text-blue-600">
-          RoomFinder
-        </h1>
 
         {/* Links */}
         <div className="flex gap-8 text-gray-700 font-medium">
@@ -32,7 +30,16 @@ const Navbar = () => {
             className="hover:text-blue-600 transition duration-300"
           >
             Contact
-          </Link>
+                  </Link>
+            <Link
+            to="/add-property"
+            className="hover:text-blue-500"
+            >
+            Add Property
+            </Link>
+            <Link to="/my-properties">
+            My Properties
+            </Link>
         </div>
       </div>
     </nav>

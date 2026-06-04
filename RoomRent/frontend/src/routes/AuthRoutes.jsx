@@ -5,6 +5,8 @@ import Home from '../pages/Home'
 import Login from '../auth/Login'
 import Profile from '../pages/Profile'
 import Navbar from '../Navbar'
+import AddProperty from '../pages/AddProperty'
+import MyProperties from '../pages/MyProperties'
 const AuthRoutes = () => {
   return (
     <>
@@ -13,7 +15,15 @@ const AuthRoutes = () => {
            <Route path='/' element={<Home/>}/>
           <Route path='/signup' element={<Signup />} />
       <Route path='/login' element={<Login />} />
-      <Route path='/profile' element={<Profile/>}/>
+        <Route path='/profile' element={<Profile />} />
+        <Route
+  path="/add-property"
+  element={<AddProperty />}
+        />
+        <Route
+  path="/my-properties"
+  element={<MyProperties />}
+/>
        </Routes>
 </>
   )
