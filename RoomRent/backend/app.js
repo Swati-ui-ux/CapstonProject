@@ -6,8 +6,8 @@ const db = require("./config/db")
 
 require("./models/user")
 const cors = require("cors")
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({limit:'50mb'}));
+app.use(express.urlencoded({ extended: true ,limit:"50mb"}));
 app.use(cors())
 
 const userRoute = require("./routes/user")
@@ -15,7 +15,7 @@ const userRoute = require("./routes/user")
 app.use("/users",userRoute)
 
 
-db.sync({ alter: true }).then(() => {
+db.sync().then(() => {
 console.log("db alter connect")
 }).catch((error) => {
 console.log("Error in db",error)

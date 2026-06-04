@@ -28,10 +28,7 @@ function Login() {
     };
 
    const res = await axios.post("http://localhost:9000/users/login",userData)
-    localStorage.setItem(
-      "user",
-      JSON.stringify(userData)
-    );
+   
     dispatch(loginSuccess({
       user: res.data.user,
       token:res.data.token,

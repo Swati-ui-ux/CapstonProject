@@ -8,38 +8,73 @@ export default function Signup() {
     phone: "",
     email: "",
     password: "",
+    image:null,
     role: "tenant",
   });
-
+  const [preview, setPreview] = useState('');
   const handleChange = (e) => {
+     if (e.target.type === "file") {
+    const file = e.target.files[0]
+    setFormData({
+      ...formData,
+      image: file,
+    });
+       const reader = new FileReader();
+       reader.readAsDataURL(file);
+       reader.onloadend = () => {
+       setPreview(reader.result)
+       }
+  } else {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  }
   };
 
-  const handleSignup = async(e) => {
-    e.preventDefault();
+ const handleSignup = async (e) => {
+  e.preventDefault();
+
   try {
-     console.log("User Data:", formData);
-      const res = await axios.post("http://localhost:9000/users/signup",formData)
-      console.log(res)
-    alert("Signup Form Submitted");
+    const data = new FormData();
+
+    data.append("name", formData.name);
+    data.append("phone", formData.phone);
+    data.append("email", formData.email);
+    data.append("password", formData.password);
+    data.append("role", formData.role);
+    data.append("image", formData.image);
+
+    const res = await axios.post(
+      "http://localhost:9000/users/signup",
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    console.log(res.data);
+
+    alert(res.data.message);
 
     setFormData({
       name: "",
       phone: "",
       email: "",
       password: "",
+      image: null,
       role: "tenant",
     });
-  } catch (error) {
-    console.log("from sign up",error)
-  }
-   
-  };
 
+    setPreview("");
+  } catch (error) {
+    console.log(error);
+  }
+};
   return (
+    <>
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSignup}
@@ -85,6 +120,16 @@ export default function Signup() {
           onChange={handleChange}
           required
         />
+        <label> Choose image</label>
+           <input
+          className="w-full border p-2 mb-3"
+          
+          type="file"
+          name="image"
+          // value={formData.image}
+          onChange={handleChange}
+          required
+        />
 
         <select
           className="w-full border p-2 mb-3"
@@ -113,6 +158,14 @@ export default function Signup() {
           </Link>
         </p>
       </form>
-    </div>
+      </div>
+     {preview && (
+  <img
+    src={preview}
+    alt="preview"
+    className="w-40 h-40 object-cover mx-auto mt-4 rounded"
+  />
+)}
+</>
   );
 }

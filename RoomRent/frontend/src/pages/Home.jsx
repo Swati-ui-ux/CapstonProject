@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Login from '../auth/Login'
 import { useSelector } from 'react-redux'
+import axios from 'axios'
+import Profile from './Profile'
 
 const Home = () => {
-  const user = useSelector(state => state.auth.user);
-  console.log("User ",user)
+
+
   return (
-    <div>
-      User data
-      
+    <div className='text-2xl font-bold text-center'>
+   Home
+     
     </div>
   )
 }

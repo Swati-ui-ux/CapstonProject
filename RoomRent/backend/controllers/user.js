@@ -1,22 +1,53 @@
 const User = require("../models/user")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const signUpUser = async (req, res) => {
-    try {
-    console.log("Body",req.body)
-        const { name, email, password,phone,role } = req.body
-        const hashedPassword = await bcrypt.hash(password,10)
-   
-    const user = await User.create({ name, email, password:hashedPassword,phone,role })
-    if(!user) return res.status(404).json({messsage:"User not created"})
-    res.status(201).json({messsage:"User sign upsuccefully",user})
-    
-} catch (error) {
-    console.log("Errorn in",error)
-    res.status(500).json({messsage:"Error when user sign up",error})
-}
+const { uploadOnCloudinary } = require("../utils/cloudinary")
 
-}
+const signUpUser = async (req, res) => {
+  try {
+    console.log("Body:", req.body);
+    console.log("File:", req.file);
+
+    const { name, email, password, phone, role } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    let imageUrl = "";
+
+    if (req.file) {
+      const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+
+      if (!cloudinaryResponse) {
+        return res.status(400).json({
+          message: "Image upload failed",
+        });
+      }
+
+      imageUrl = cloudinaryResponse.secure_url;
+    }
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      phone,
+      role,
+      image: imageUrl,
+    });
+
+    return res.status(201).json({
+      message: "User signup successfully",
+      user,
+    });
+  } catch (error) {
+    console.log("Error:", error);
+
+    return res.status(500).json({
+      message: "Error when user signup",
+      error: error.message,
+    });
+  }
+};
 
   
 
@@ -45,5 +76,20 @@ const loginUser = async (req,res) => {
     }
 }
 
-
-module.exports = {signUpUser,loginUser}
+const getProfile = async(req,res) => {
+try {
+    console.log("user id", req.userId)
+    const user = await User.findByPk(req.userId, {
+    
+     attributes: {
+    exclude: ["password", "resetToken", "resetTokenExpiry"],
+  },
+    })
+    console.log(user)
+    res.status(200).json({user,message:"get user success",user})
+} catch (error) {
+    console.log("Error",error.message)
+    res.status(500).json({message:"server error"})
+}
+}
+module.exports = {signUpUser,loginUser,getProfile}
