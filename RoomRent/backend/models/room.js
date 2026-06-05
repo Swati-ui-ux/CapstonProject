@@ -35,6 +35,10 @@ const Room = sequelize.define("Room", {
     type: DataTypes.DATE,
     allowNull: true,
   },
+  dueDate: {
+    type: DataTypes.DATEONLY,
+    allowNull: true,
+}
 });
 
 module.exports = Room;

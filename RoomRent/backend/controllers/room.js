@@ -1,6 +1,7 @@
 const Room = require("../models/room");
 const Property = require("../models/property");
 const { User } = require("../models")
+const Payment = require("../models/payment")
 
 const createRooms = async (req, res) => {
   try {
@@ -111,9 +112,28 @@ try {
   if (room.status === "occupied") {
     return res.status(400).json({message:"Room already occupied"})
   }
-  room.tenantId = tenantId
-  room.status = "occupied"
-  await room.save()
+    room.tenantId = tenantId
+    room.status = "occupied"
+    const assignedDate = new Date();
+
+    const dueDate = new Date(assignedDate);
+
+    dueDate.setMonth(
+      dueDate.getMonth() + 1
+    );
+
+    room.assignedDate = assignedDate;
+    room.dueDate = dueDate;
+
+  await room.save();
+  
+  await Payment.create({
+    roomId: room.id,
+    tenantId,
+    amount: room.rent,
+    month: "June 2026",
+    status: "pending",
+  });
    res.status(200).json({
       message: "Tenant assigned successfully",
       room
@@ -127,6 +147,36 @@ try {
 }
 }
 
+const getMyRoom = async (req,res) => {
+try {
+  const room = await Room.findAll({
+    where: {
+    tenantId:req.userId
+    },
+    include: [
+      {
+        model: Property
+      }
+    ]
+  })
+  if (!room) {
+    return res.status(404).json({
+    message:"No rrom assignd"
+    })
+  }
+  res.status(200).json({
+  room
+  })
+  console.log("Rooms",room)
+} catch (error) {
+  console.log(error.message);
+
+    res.status(500).json({
+      message: "Error fetching room"
+    });
+}
+}
+
 module.exports = {
-  createRooms,getPropertyRooms,assignTenant
+  createRooms,getPropertyRooms,assignTenant,getMyRoom
 };

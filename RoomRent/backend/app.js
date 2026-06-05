@@ -14,9 +14,13 @@ app.use(cors())
 const userRoute = require("./routes/user")
 const propertyRoute = require("./routes/property")
 const roomRoute = require("./routes/room")
+
+const paymentRoute = require("./routes/payment");
+app.use("/payment",paymentRoute);
+
 app.use("/users",userRoute)
 app.use("/property",propertyRoute)
-app.use("/room",roomRoute)
+app.use("/room", roomRoute)
 db.sync().then(() => {
 console.log("db alter connect")
 }).catch((error) => {

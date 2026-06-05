@@ -8,6 +8,7 @@ import Navbar from '../Navbar'
 import AddProperty from '../pages/AddProperty'
 import MyProperties from '../pages/MyProperties'
 import PropertyDetails from '../pages/PropertyDetail'
+import MyRoom from '../pages/MyRoom'
 const AuthRoutes = () => {
   return (
     <>
@@ -28,6 +29,10 @@ const AuthRoutes = () => {
         <Route
   path="/property/:id"
   element={<PropertyDetails />}
+        />
+        <Route
+  path="/my-room"
+  element={<MyRoom />}
 />
        </Routes>
 </>

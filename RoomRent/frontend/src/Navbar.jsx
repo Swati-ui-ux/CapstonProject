@@ -39,7 +39,8 @@ const Navbar = () => {
             </Link>
             <Link to="/my-properties">
             My Properties
-            </Link>
+          </Link>
+          <Link to='/my-room'>My Room</Link>
         </div>
       </div>
     </nav>

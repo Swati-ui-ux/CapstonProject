@@ -164,7 +164,7 @@ const RoomList = ({ propertyId }) => {
                 .map((room) => (
                   <div
                     key={room.id}
-                    className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5 hover:shadow-lg transition"
+                    className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5 hover:shadow-lg transition"
                   >
                     <div className="flex justify-between items-center">
 
@@ -241,7 +241,7 @@ const RoomList = ({ propertyId }) => {
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
 
-          <div className="bg-white p-6 rounded-xl w-[500px] max-h-[500px] overflow-y-auto">
+          <div className="bg-white p-6 rounded-xl w-125 max-h-125 overflow-y-auto">
 
             <h2 className="text-2xl font-bold mb-4">
               Select Tenant
