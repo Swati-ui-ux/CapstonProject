@@ -55,7 +55,6 @@ export default function Signup() {
       }
     );
 
-    console.log(res.data);
 
     alert(res.data.message);
 

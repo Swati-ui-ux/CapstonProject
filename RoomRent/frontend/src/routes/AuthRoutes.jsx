@@ -7,6 +7,7 @@ import Profile from '../pages/Profile'
 import Navbar from '../Navbar'
 import AddProperty from '../pages/AddProperty'
 import MyProperties from '../pages/MyProperties'
+import PropertyDetails from '../pages/PropertyDetail'
 const AuthRoutes = () => {
   return (
     <>
@@ -23,6 +24,10 @@ const AuthRoutes = () => {
         <Route
   path="/my-properties"
   element={<MyProperties />}
+        />
+        <Route
+  path="/property/:id"
+  element={<PropertyDetails />}
 />
        </Routes>
 </>

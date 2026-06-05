@@ -1,0 +1,158 @@
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+const RoomList = ({ propertyId }) => {
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getRooms = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `http://localhost:9000/room/property/${propertyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response)
+      setRooms(response.data.rooms);
+    } catch (error) {
+      console.log(error,message);
+
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to load rooms"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (propertyId) {
+      getRooms();
+    }
+  }, [propertyId]);
+
+  if (loading) {
+    return (
+      <div className="bg-white mt-8 rounded-2xl shadow-lg p-8">
+        <h2 className="text-center text-lg font-semibold text-gray-500">
+          Loading Rooms...
+        </h2>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-10 bg-white rounded-2xl shadow-xl p-6">
+
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-blue-600">
+          Rooms & Floors
+        </h2>
+
+        <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-medium">
+          Total Rooms: {rooms.length}
+        </span>
+      </div>
+
+      {rooms.length === 0 ? (
+        <div className="text-center py-10">
+
+          <h3 className="text-xl font-semibold text-gray-600">
+            No Rooms Found
+          </h3>
+
+          <p className="text-gray-400 mt-2">
+            Generate rooms first.
+          </p>
+        </div>
+      ) : (
+        [...new Set(
+          rooms.map(
+            (room) => room.floorNumber
+          )
+        )].map((floor) => (
+          <div
+            key={floor}
+            className="mb-8"
+          >
+            <div className="flex items-center gap-3 mb-4">
+
+              <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex justify-center items-center font-bold">
+                {floor}
+              </div>
+
+              <h3 className="text-2xl font-bold text-gray-700">
+                Floor {floor}
+              </h3>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+              {rooms
+                .filter(
+                  (room) =>
+                    room.floorNumber === floor
+                )
+                .map((room) => (
+                  <div
+                    key={room.id}
+                    className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5 hover:shadow-lg transition"
+                  >
+                    <div className="flex justify-between items-center">
+
+                      <h4 className="text-xl font-bold text-gray-800">
+                        Room {room.roomNumber}
+                      </h4>
+
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                          room.status ===
+                          "available"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {room.status}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 space-y-2">
+
+                      <p className="text-gray-600">
+                        💰 Rent:
+                        <span className="font-semibold ml-2">
+                          ₹{room.rent}
+                        </span>
+                      </p>
+
+                      <p className="text-gray-600">
+                        🏢 Floor:
+                        <span className="font-semibold ml-2">
+                          {room.floorNumber}
+                        </span>
+                      </p>
+                    </div>
+
+                    <button
+                      className="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+                    >
+                      Assign Tenant
+                    </button>
+                  </div>
+                ))}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+};
+
+export default RoomList;

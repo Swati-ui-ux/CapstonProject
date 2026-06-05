@@ -35,7 +35,7 @@ function Login() {
     }))
     localStorage.setItem("token", res.data.token)
     toast(res.data.message)
-   console.log(res)
+   
     setTimeout(() => {
       setLoading(false);
       navigate("/");

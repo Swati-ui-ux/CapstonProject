@@ -5,7 +5,7 @@ const Home = () => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-6">
       <div className="bg-white shadow-2xl rounded-3xl p-10 max-w-2xl w-full text-center">
 
         {/* Profile Image */}

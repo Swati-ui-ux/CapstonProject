@@ -65,7 +65,7 @@ const Profile = () => {
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg overflow-hidden">
 
         {/* Header */}
-        <div className="h-40 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+        <div className="h-40 bg-linear-to-r from-blue-500 to-purple-600"></div>
 
         {/* Profile */}
         <div className="relative px-6 pb-6">

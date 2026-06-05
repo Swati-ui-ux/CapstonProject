@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
 
 const MyProperties = () => {
   const [properties, setProperties] = useState([]);
@@ -82,7 +83,13 @@ const MyProperties = () => {
                 {new Date(
                   property.createdAt
                 ).toLocaleDateString()}
-              </div>
+                  </div>
+                  <Link
+                to={`/property/${property.id}`}
+                className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg"
+                >
+                View Details
+                </Link>
             </div>
           ))}
         </div>

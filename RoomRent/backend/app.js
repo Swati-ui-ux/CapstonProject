@@ -13,10 +13,11 @@ app.use(cors())
 
 const userRoute = require("./routes/user")
 const propertyRoute = require("./routes/property")
+const roomRoute = require("./routes/room")
 app.use("/users",userRoute)
 app.use("/property",propertyRoute)
-
-db.sync({alter:true}).then(() => {
+app.use("/room",roomRoute)
+db.sync().then(() => {
 console.log("db alter connect")
 }).catch((error) => {
 console.log("Error in db",error)
