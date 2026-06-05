@@ -1,4 +1,4 @@
-const Room = require("../models/room");
+const Room = require("../models/room")
 const Property = require("../models/property");
 const { User } = require("../models")
 const Payment = require("../models/payment")
@@ -167,7 +167,6 @@ try {
   res.status(200).json({
   room
   })
-  console.log("Rooms",room)
 } catch (error) {
   console.log(error.message);
 

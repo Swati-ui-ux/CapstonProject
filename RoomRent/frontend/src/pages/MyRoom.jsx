@@ -8,7 +8,7 @@ const MyRoom = () => {
   const [payments, setPayments] = useState([]);
 
  
-  const getPayments = async () => {
+const getPayments = async () => {
     try {
       const token = localStorage.getItem("token");
 
@@ -22,7 +22,7 @@ const MyRoom = () => {
       );
 
        const data = response.data.payments;
-
+     console.log("payment data",data)
     if (!data || data.length === 0) {
       setPayments([]);
       toast.info("No payment records found");
@@ -59,6 +59,23 @@ const MyRoom = () => {
     }
   };
 
+    const payNow = async (id) => {
+  const token = localStorage.getItem("token");
+
+  await axios.post(
+    "http://localhost:9000/payment/pay",
+    { paymentId: id },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  toast.success("Payment Done");
+  getPayments(); // refresh
+};
+    
   useEffect(() => {
     getMyRoom();
     getPayments();
@@ -186,10 +203,11 @@ const MyRoom = () => {
               <h3 className="text-lg font-bold mb-2">
                 Rent Information
               </h3>
-
+                <p>🏠 Property: {payment.Room?.Property?.propertyName}</p>
+                <p>🚪 Room No: {payment.Room?.roomNumber}</p>
               <p>💰 Monthly Rent: ₹{payment.amount}</p>
               <p>📅 Month: {payment.month}</p>
-
+ 
               <p
                 className={
                   payment.status === "paid"
@@ -198,11 +216,17 @@ const MyRoom = () => {
                 }
               >
                 Status: {payment.status}
-              </p>
+                  </p>
+                  <button
+                onClick={() => payNow(payment.id)}
+                className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                Pay Rent
+                </button>
             </div>
           ))
         )}
-
+      
       </div>
     </div>
   );

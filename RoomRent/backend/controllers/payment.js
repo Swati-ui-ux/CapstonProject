@@ -1,16 +1,23 @@
+const { Property, Room } = require("../models")
 const Payment = require("../models/payment");
 
 const getMyPayments = async (req,res) => {
 
   try {
-
+   console.log("USER ID:", req.userId);
     const payments = await Payment.findAll({
       where:{
         tenantId:req.userId
       },
+        include: [
+            {
+                model: Room,
+                include:[Property]
+            }
+        ],
       order:[
         ["createdAt","DESC"]
-      ]
+        ],
     });
 
     res.status(200).json({
@@ -19,7 +26,7 @@ const getMyPayments = async (req,res) => {
 
   } catch (error) {
 
-    console.log(error);
+    console.log("Errorn",error.message)
 
     res.status(500).json({
       message:"Error fetching payments"
@@ -29,6 +36,43 @@ const getMyPayments = async (req,res) => {
 
 };
 
+const payRent = async (req, res) => {
+  try {
+    const { paymentId } = req.body;
+
+    const payment = await Payment.findByPk(paymentId);
+
+    if (!payment) {
+      return res.status(404).json({ message: "Payment not found" });
+    }
+
+    payment.status = "paid";
+    payment.paymentDate = new Date();
+
+    await payment.save();
+     const room = await Room.findByPk(payment.roomId);
+
+    if (room) {
+      room.dueDate = new Date(room.dueDate);
+      room.dueDate.setMonth(room.dueDate.getMonth() + 1);
+
+      await room.save();
+    }
+
+    res.status(200).json({
+      message: "Payment successful",
+      payment,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Payment failed",
+    });
+  }
+};
+
 module.exports = {
-  getMyPayments
+    getMyPayments,
+    payRent,
 };

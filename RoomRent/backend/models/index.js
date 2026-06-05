@@ -21,4 +21,5 @@ Room.hasMany(Payment, { foreignKey: "roomId" })
 Payment.belongsTo(Room, { foreignKey: "roomId" })
 User.hasMany(Payment, { foreignKey: "tenantId" })
 Payment.belongsTo(User, { foreignKey: "tenantId" })
-module.exports = { User, Property }
+module.exports = { User, Property ,  Room,
+  Payment}
