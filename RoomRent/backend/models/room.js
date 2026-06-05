@@ -27,6 +27,14 @@ const Room = sequelize.define("Room", {
     ),
     defaultValue: "available",
   },
+   propertyId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+    assignedDate: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
 });
 
 module.exports = Room;

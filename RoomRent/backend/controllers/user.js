@@ -98,16 +98,16 @@ try {
 
 const getTenants = async(req,res) => {
 try {
-  const tenents = await User.findAll({
+  const tenants = await User.findAll({
     where: {
     role:"tenant"
     },
     attributes:['id','name','email']
   })
-  if (!tenents) {
+  if (!tenants) {
   res.status(404).json({message:"Tenants not found"})
   }
-  res.status(200).json({message:"Success",tenents})
+  res.status(200).json({message:"Success",tenants})
 } catch (error) {
   res.status(500).json({message:"server error"})
 }

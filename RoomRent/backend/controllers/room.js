@@ -1,5 +1,6 @@
 const Room = require("../models/room");
 const Property = require("../models/property");
+const { User } = require("../models")
 
 const createRooms = async (req, res) => {
   try {
@@ -76,7 +77,13 @@ const getPropertyRooms = async (req, res) => {
       order: [
         ["floorNumber", "ASC"],
         ["roomNumber", "ASC"]
-      ]
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "name", "email", "image"],
+        },
+      ],
     });
    console.log("ROOM API HIT");
    console.log("ROOM ",rooms);
@@ -94,6 +101,32 @@ const getPropertyRooms = async (req, res) => {
   }
 };
 
+const assignTenant = async (req,res) => {
+try {
+  const { roomId, tenantId } = req.body
+  const room = await Room.findByPk(roomId)
+  if (!room) {
+  return res.status(404).json({message:"Room not found"})
+  }
+  if (room.status === "occupied") {
+    return res.status(400).json({message:"Room already occupied"})
+  }
+  room.tenantId = tenantId
+  room.status = "occupied"
+  await room.save()
+   res.status(200).json({
+      message: "Tenant assigned successfully",
+      room
+    });
+} catch (error) {
+  console.log(error.message);
+
+    res.status(500).json({
+      message: "Error assigning tenant"
+    });
+}
+}
+
 module.exports = {
-  createRooms,getPropertyRooms
+  createRooms,getPropertyRooms,assignTenant
 };

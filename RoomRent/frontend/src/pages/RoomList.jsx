@@ -6,10 +6,14 @@ const RoomList = ({ propertyId }) => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [tenants, setTenants] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
+  const token = localStorage.getItem("token");
+
   const getRooms = async () => {
     try {
-      const token = localStorage.getItem("token");
-
       const response = await axios.get(
         `http://localhost:9000/room/property/${propertyId}`,
         {
@@ -18,10 +22,12 @@ const RoomList = ({ propertyId }) => {
           },
         }
       );
-      console.log(response)
-      setRooms(response.data.rooms);
+
+      console.log("Rooms =>", response.data);
+
+      setRooms(response.data.rooms || []);
     } catch (error) {
-      console.log(error,message);
+      console.log(error);
 
       toast.error(
         error?.response?.data?.message ||
@@ -29,6 +35,63 @@ const RoomList = ({ propertyId }) => {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getTenants = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:9000/users/tenants",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Tenants =>", response.data);
+
+      setTenants(response.data.tenants || []);
+    } catch (error) {
+      console.log(error);
+
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to load tenants"
+      );
+    }
+  };
+
+  const assignTenant = async (
+    roomId,
+    tenantId
+  ) => {
+    try {
+      const response = await axios.put(
+        "http://localhost:9000/room/assign-tenant",
+        {
+          roomId,
+          tenantId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success(response.data.message);
+
+      setShowModal(false);
+
+      getRooms();
+    } catch (error) {
+      console.log(error);
+
+      toast.error(
+        error?.response?.data?.message ||
+          "Error assigning tenant"
+      );
     }
   };
 
@@ -63,7 +126,6 @@ const RoomList = ({ propertyId }) => {
 
       {rooms.length === 0 ? (
         <div className="text-center py-10">
-
           <h3 className="text-xl font-semibold text-gray-600">
             No Rooms Found
           </h3>
@@ -83,7 +145,6 @@ const RoomList = ({ propertyId }) => {
             className="mb-8"
           >
             <div className="flex items-center gap-3 mb-4">
-
               <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex justify-center items-center font-bold">
                 {floor}
               </div>
@@ -103,7 +164,7 @@ const RoomList = ({ propertyId }) => {
                 .map((room) => (
                   <div
                     key={room.id}
-                    className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5 hover:shadow-lg transition"
+                    className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-5 hover:shadow-lg transition"
                   >
                     <div className="flex justify-between items-center">
 
@@ -124,7 +185,6 @@ const RoomList = ({ propertyId }) => {
                     </div>
 
                     <div className="mt-4 space-y-2">
-
                       <p className="text-gray-600">
                         💰 Rent:
                         <span className="font-semibold ml-2">
@@ -140,16 +200,99 @@ const RoomList = ({ propertyId }) => {
                       </p>
                     </div>
 
-                    <button
-                      className="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
-                    >
-                      Assign Tenant
-                    </button>
+                    {room.User && (
+                      <div className="mt-3 bg-green-50 p-3 rounded-lg">
+                        <p className="font-semibold text-green-700">
+                          Tenant:
+                          {" "}
+                          {room.User.name}
+                        </p>
+
+                        <p className="text-sm text-gray-600">
+                          {room.User.email}
+                        </p>
+                      </div>
+                    )}
+
+                    {room.status ===
+                      "available" && (
+                      <button
+                        onClick={() => {
+                          setSelectedRoom(
+                            room
+                          );
+                          setShowModal(
+                            true
+                          );
+                          getTenants();
+                        }}
+                        className="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+                      >
+                        Assign Tenant
+                      </button>
+                    )}
                   </div>
                 ))}
             </div>
           </div>
         ))
+      )}
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+
+          <div className="bg-white p-6 rounded-xl w-[500px] max-h-[500px] overflow-y-auto">
+
+            <h2 className="text-2xl font-bold mb-4">
+              Select Tenant
+            </h2>
+
+            {tenants.length === 0 ? (
+              <p className="text-center text-gray-500">
+                No tenants found
+              </p>
+            ) : (
+              tenants.map((tenant) => (
+                <div
+                  key={tenant.id}
+                  className="border rounded-lg p-3 mb-3 flex justify-between items-center"
+                >
+                  <div>
+                    <h3 className="font-bold">
+                      {tenant.name}
+                    </h3>
+
+                    <p className="text-sm text-gray-500">
+                      {tenant.email}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      assignTenant(
+                        selectedRoom.id,
+                        tenant.id
+                      )
+                    }
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                  >
+                    Assign
+                  </button>
+                </div>
+              ))
+            )}
+
+            <button
+              onClick={() =>
+                setShowModal(false)
+              }
+              className="w-full mt-4 bg-red-500 hover:bg-red-600 text-white py-2 rounded"
+            >
+              Close
+            </button>
+
+          </div>
+        </div>
       )}
     </div>
   );
