@@ -16,7 +16,10 @@ const Room = sequelize.define("Room", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-
+  tenantId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
   status: {
     type: DataTypes.ENUM(
       "available",

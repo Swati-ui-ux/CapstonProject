@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
+import Loader from "../components/Loader"
+import { useNavigate } from "react-router-dom"
 
 const AddProperty = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +10,8 @@ const AddProperty = () => {
       description: "",
     image:null,
   });
+  const navigate = useNavigate()
+  const [isLoading,setIsLoading] = useState(false)
   const handleChange = (e) => {
   if (e.target.type === "file") {
     const file = e.target.files[0];
@@ -37,7 +41,7 @@ const AddProperty = () => {
       data.append("location", formData.location);
       data.append("description", formData.description);
       data.append("image", formData.image);
-
+  setIsLoading(true)
     const response = await axios.post(
       "http://localhost:9000/property/create",
       data,
@@ -53,7 +57,8 @@ const AddProperty = () => {
     console.log(response.data);
 
     alert("Property Added Successfully");
-
+    navigate("/my-properties")
+   setIsLoading(false)
     setFormData({
       propertyName: "",
       location: "",
@@ -61,7 +66,7 @@ const AddProperty = () => {
       image: null,
     });
 
-    setPreview("");
+    
   } catch (error) {
     console.log(error);
 
@@ -149,7 +154,11 @@ const AddProperty = () => {
             type="submit"
             className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
           >
-            Add Property
+             {isLoading? (
+    <Loader text="Adding..." />
+  ) : (
+    "Add Properties"
+  )}
           </button>
               </form>
              

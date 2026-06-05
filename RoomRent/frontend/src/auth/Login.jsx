@@ -17,31 +17,42 @@ function Login() {
   
   const dispatch = useDispatch()
 
-  const handleLogin =async (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+  e.preventDefault();
 
+  try {
     setLoading(true);
 
-    const userData = {
-      email,
-      password,
-    };
+    const res = await axios.post(
+      "http://localhost:9000/users/login",
+      { email, password }
+    );
 
-   const res = await axios.post("http://localhost:9000/users/login",userData)
-   
-    dispatch(loginSuccess({
-      user: res.data.user,
-      token:res.data.token,
-    }))
-    localStorage.setItem("token", res.data.token)
-    toast(res.data.message)
-   
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/");
-    }, 1000);
-  };
+    dispatch(
+      loginSuccess({
+        user: res.data.user,
+        token: res.data.token,
+      })
+    );
 
+    localStorage.setItem(
+      "token",
+      res.data.token
+    );
+
+    toast.success(res.data.message);
+
+    navigate("/");
+  } catch (error) {
+    console.log(error);
+
+    toast.error(
+      error?.response?.data?.message
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form

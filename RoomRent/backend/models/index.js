@@ -14,4 +14,6 @@ Room.belongsTo(Property, {
   foreignKey: "propertyId",
 });
 
+User.hasMany(Room, { foreignKey: "tenantId" })
+Room.belongsTo(User, { foreignKey: "tenantId" })
 module.exports = { User, Property }

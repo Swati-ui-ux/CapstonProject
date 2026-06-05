@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Loader from "../components/Loader"
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -11,27 +12,24 @@ export default function Signup() {
     image:null,
     role: "tenant",
   });
-  const [preview, setPreview] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
   const handleChange = (e) => {
-     if (e.target.type === "file") {
-    const file = e.target.files[0]
-    setFormData({
-      ...formData,
-      image: file,
-    });
-       const reader = new FileReader();
-       reader.readAsDataURL(file);
-       reader.onloadend = () => {
-       setPreview(reader.result)
-       }
+    const { name, value, files, type } = e.target;
+
+  if (type === "file") {
+    setFormData((prev) => ({
+      ...prev,
+      image: files[0],
+    }));
   } else {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   }
   };
-
+console.log("from sign up ")
  const handleSignup = async (e) => {
   e.preventDefault();
 
@@ -44,7 +42,7 @@ export default function Signup() {
     data.append("password", formData.password);
     data.append("role", formData.role);
     data.append("image", formData.image);
-
+setIsLoading(true)
     const res = await axios.post(
       "http://localhost:9000/users/signup",
       data,
@@ -54,10 +52,10 @@ export default function Signup() {
         },
       }
     );
-
-
+console.log('data',res)
+   setIsLoading(false)
     alert(res.data.message);
-
+   navigate("/login")
     setFormData({
       name: "",
       phone: "",
@@ -67,9 +65,10 @@ export default function Signup() {
       role: "tenant",
     });
 
-    setPreview("");
+    // setPreview("");
   } catch (error) {
     console.log(error);
+    setIsLoading(false)
   }
 };
   return (
@@ -144,7 +143,11 @@ export default function Signup() {
           type="submit"
           className="bg-black text-white w-full p-2 mb-3"
         >
-          Create Account
+          {isLoading? (
+    <Loader text="Creating Account..." />
+  ) : (
+    "Create Account"
+  )}
         </button>
 
         <p className="text-sm text-center">
@@ -158,13 +161,7 @@ export default function Signup() {
         </p>
       </form>
       </div>
-     {preview && (
-  <img
-    src={preview}
-    alt="preview"
-    className="w-40 h-40 object-cover mx-auto mt-4 rounded"
-  />
-)}
+     
 </>
   );
 }

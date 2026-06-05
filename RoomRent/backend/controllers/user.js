@@ -5,8 +5,8 @@ const { uploadOnCloudinary } = require("../utils/cloudinary")
 
 const signUpUser = async (req, res) => {
   try {
-    console.log("Body:", req.body);
-    console.log("File:", req.file);
+    // console.log("Body:", req.body);
+    // console.log("File:", req.file);
 
     const { name, email, password, phone, role } = req.body;
 
@@ -34,13 +34,13 @@ const signUpUser = async (req, res) => {
       role,
       image: imageUrl,
     });
-
+console.log("User ---->",user)
     return res.status(201).json({
       message: "User signup successfully",
       user,
     });
   } catch (error) {
-    console.log("Error:", error);
+    console.log("Error:", error.message);
 
     return res.status(500).json({
       message: "Error when user signup",
@@ -54,8 +54,10 @@ const signUpUser = async (req, res) => {
 const loginUser = async (req,res) => {
     
     try {
-        const { email, password } = req.body
-        const user = await User.findOne({ where: { email } })
+      const { email, password } = req.body
+      console.log("password",password)
+      const user = await User.findOne({ where: { email } })
+      console.log("User =>", user);
          if (!user) {
         return res.status(404).json({ message: "User not found" })
         }
@@ -63,7 +65,8 @@ const loginUser = async (req,res) => {
         if (!isMatch) {
           return res.status(401).json({ message: "Invalid password" })
         
-        }
+      }
+      console.log("Password Match =>", isMatch);
         const token = jwt.sign(
   { id: user.id, email: user.email },
   process.env.SECRET_KEY,
@@ -92,4 +95,22 @@ try {
     res.status(500).json({message:"server error"})
 }
 }
-module.exports = {signUpUser,loginUser,getProfile}
+
+const getTenants = async(req,res) => {
+try {
+  const tenents = await User.findAll({
+    where: {
+    role:"tenant"
+    },
+    attributes:['id','name','email']
+  })
+  if (!tenents) {
+  res.status(404).json({message:"Tenants not found"})
+  }
+  res.status(200).json({message:"Success",tenents})
+} catch (error) {
+  res.status(500).json({message:"server error"})
+}
+}
+
+module.exports = {signUpUser,loginUser,getProfile,getTenants}
