@@ -1,47 +1,116 @@
-import React from 'react'
-import {Route, Routes} from "react-router-dom"
-import Signup from '../auth/Signup'
-import Home from '../pages/Home'
-import Login from '../auth/Login'
-import Profile from '../pages/Profile'
-import Navbar from '../Navbar'
-import AddProperty from '../pages/AddProperty'
-import MyProperties from '../pages/MyProperties'
-import PropertyDetails from '../pages/PropertyDetail'
-import MyRoom from '../pages/MyRoom'
-import OwnerPayments from '../pages/OwnerPayment'
+import { Route, Routes } from "react-router-dom";
+
+import Signup from "../auth/Signup";
+import Login from "../auth/Login";
+
+import Home from "../pages/Home";
+import Profile from "../pages/Profile";
+import AddProperty from "../pages/AddProperty";
+import MyProperties from "../pages/MyProperties";
+import PropertyDetails from "../pages/PropertyDetail";
+import MyRoom from "../pages/MyRoom";
+import OwnerPayments from "../pages/OwnerPayment";
+
+import Navbar from "../Navbar";
+
+import ProtectedRoute from "./ProtectedRoute";
+import OwnerRoute from "./OwnerRoute";
+import TenantRoute from "./TenantRoute";
+
 const AuthRoutes = () => {
   return (
     <>
-      <Navbar/>
-      <Routes>
-           <Route path='/' element={<Home/>}/>
-          <Route path='/signup' element={<Signup />} />
-      <Route path='/login' element={<Login />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route
-  path="/add-property"
-  element={<AddProperty />}
-        />
-        <Route
-  path="/my-properties"
-  element={<MyProperties />}
-        />
-        <Route
-  path="/property/:id"
-  element={<PropertyDetails />}
-        />
-        <Route
-  path="/my-room"
-  element={<MyRoom />}
-        />
-          <Route
-  path="/owner-payments"
-  element={<OwnerPayments />}
-/>
-       </Routes>
-</>
-  )
-}
+      <Navbar />
 
-export default AuthRoutes
+      <Routes>
+
+        {/* Public Routes */}
+
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected */}
+
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Owner Only */}
+
+        <Route
+          path="/add-property"
+          element={
+            <ProtectedRoute>
+              <OwnerRoute>
+                <AddProperty />
+              </OwnerRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-properties"
+          element={
+            <ProtectedRoute>
+              <OwnerRoute>
+                <MyProperties />
+              </OwnerRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/owner-payments"
+          element={
+            <ProtectedRoute>
+              <OwnerRoute>
+                <OwnerPayments />
+              </OwnerRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Tenant Only */}
+
+        <Route
+          path="/my-room"
+          element={
+            <ProtectedRoute>
+              <TenantRoute>
+                <MyRoom />
+              </TenantRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Common */}
+
+        <Route
+          path="/property/:id"
+          element={
+            <ProtectedRoute>
+              <PropertyDetails />
+            </ProtectedRoute>
+          }
+        />
+
+      </Routes>
+    </>
+  );
+};
+
+export default AuthRoutes;
