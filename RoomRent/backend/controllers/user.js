@@ -113,4 +113,48 @@ try {
 }
 }
 
-module.exports = {signUpUser,loginUser,getProfile,getTenants}
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    
+    if (req.body.name) {
+      user.name = req.body.name;
+    }
+
+  
+    if (req.body.phone) {
+      user.phone = req.body.phone;
+    }
+
+  
+    if (req.file) {
+      const cloudinaryResponse =
+        await uploadOnCloudinary(req.file.path);
+
+      if (cloudinaryResponse) {
+        user.image = cloudinaryResponse.secure_url;
+      }
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+module.exports = {signUpUser,loginUser,getProfile,getTenants,updateUser}

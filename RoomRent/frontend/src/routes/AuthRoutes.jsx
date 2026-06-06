@@ -9,6 +9,7 @@ import AddProperty from '../pages/AddProperty'
 import MyProperties from '../pages/MyProperties'
 import PropertyDetails from '../pages/PropertyDetail'
 import MyRoom from '../pages/MyRoom'
+import OwnerPayments from '../pages/OwnerPayment'
 const AuthRoutes = () => {
   return (
     <>
@@ -33,6 +34,10 @@ const AuthRoutes = () => {
         <Route
   path="/my-room"
   element={<MyRoom />}
+        />
+          <Route
+  path="/owner-payments"
+  element={<OwnerPayments />}
 />
        </Routes>
 </>

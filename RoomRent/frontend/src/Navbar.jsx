@@ -36,6 +36,9 @@ const Navbar = () => {
             My Properties
           </Link>
           <Link to='/my-room' className='hover:text-blue-100 '>My Room</Link>
+          <Link to='/owner-payments' className='hover:text-blue-100 '>Owner-payments</Link>
+  
+          
         </div>
       </div>
     </nav>

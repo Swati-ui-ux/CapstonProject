@@ -1,5 +1,5 @@
 const instance = require("../config/razorpay")
-const { Property, Room } = require("../models")
+const { Property, Room ,User} = require("../models")
 const Payment = require("../models/payment");
 
 const getMyPayments = async (req,res) => {
@@ -88,9 +88,58 @@ const createOrder = async (req,res) => {
        res.status(500).json({ message: "Order creation failed" });
    }
 }
+const getOwnerPayments = async (req, res) => {
+  try {
 
+    const payments = await Payment.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["id", "name", "email",'phone'],
+        },
+        {
+          model: Room,
+          attributes: [
+            "id",
+            "roomNumber",
+            "rent",
+            "floorNumber",
+          ],
+          include: [
+            {
+              model: Property,
+              where: {
+                ownerId: req.userId,
+              },
+              attributes: [
+                "id",
+                "propertyName",
+                "location",
+              ],
+            },
+          ],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    return res.status(200).json({
+      payments,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Error fetching payments",
+    });
+  }
+};
 module.exports = {
-    getMyPayments,
-    payRent,
-    createOrder
+  getMyPayments,
+  payRent,
+  createOrder,
+  getOwnerPayments,
+  
+    
 };

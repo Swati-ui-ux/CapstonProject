@@ -6,10 +6,21 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+  });
+
+  const [file, setFile] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
+  // ==========================
+  // GET PROFILE
+  // ==========================
   const getData = async () => {
     try {
       const response = await axios.get(
@@ -21,9 +32,14 @@ const Profile = () => {
         }
       );
 
-      console.log("user", response.data.user);
+      const userData = response.data.user;
 
-      setUser(response.data.user);
+      setUser(userData);
+
+      setFormData({
+        name: userData.name || "",
+        phone: userData.phone || "",
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -31,15 +47,80 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // ==========================
+  // LOGOUT
+  // ==========================
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // ==========================
+  // INPUT CHANGE
+  // ==========================
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
+  // ==========================
+  // FILE CHANGE
+  // ==========================
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  // ==========================
+  // UPDATE PROFILE
+  // ==========================
+  const handleUpdateProfile = async () => {
+    try {
+      const data = new FormData();
+
+      data.append("name", formData.name);
+      data.append("phone", formData.phone);
+      console.log(file);
+      if (file) {
+        data.append("image", file);
+      }
+
+      const response = await axios.put(
+        "http://localhost:9000/users/update",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setUser(response.data.user);
+
+      setFormData({
+        name: response.data.user.name,
+        phone: response.data.user.phone,
+      });
+
+      setFile(null);
+      setIsEditing(false);
+
+      alert("Profile Updated Successfully");
+    } catch (error) {
+      console.log(error);
+      alert("Update Failed");
+    }
+  };
+
+  // ==========================
+  // LOADING
+  // ==========================
   if (loading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -50,6 +131,9 @@ const Profile = () => {
     );
   }
 
+  // ==========================
+  // NO USER
+  // ==========================
   if (!user) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -65,16 +149,17 @@ const Profile = () => {
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg overflow-hidden">
 
         {/* Header */}
-        <div className="h-40 bg-linear-to-r from-blue-500 to-purple-600"></div>
+        <div className="h-40 bg-gradient-to-r from-blue-500 to-purple-600"></div>
 
-        {/* Profile */}
         <div className="relative px-6 pb-6">
 
+          {/* Profile Info */}
           <div className="flex flex-col items-center">
+
             <img
               src={user.image}
               alt={user.name}
-              className="w-50 h-50 rounded-full border-4 border-white object-cover -mt-16 shadow-md"
+              className="w-40 h-40 rounded-full border-4 border-white object-cover -mt-16 shadow-md"
             />
 
             <h2 className="text-2xl font-bold mt-4">
@@ -96,40 +181,28 @@ const Profile = () => {
             </span>
           </div>
 
-          {/* User Details */}
+          {/* Details */}
           <div className="grid md:grid-cols-2 gap-4 mt-8">
 
             <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">
-                Full Name
-              </p>
-              <p className="font-semibold">
-                {user.name}
-              </p>
+              <p className="text-gray-500 text-sm">Full Name</p>
+              <p className="font-semibold">{user.name}</p>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">
-                Email
-              </p>
+              <p className="text-gray-500 text-sm">Email</p>
               <p className="font-semibold break-all">
                 {user.email}
               </p>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">
-                Phone Number
-              </p>
-              <p className="font-semibold">
-                {user.phone}
-              </p>
+              <p className="text-gray-500 text-sm">Phone Number</p>
+              <p className="font-semibold">{user.phone}</p>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">
-                Role
-              </p>
+              <p className="text-gray-500 text-sm">Role</p>
               <p className="font-semibold capitalize">
                 {user.role}
               </p>
@@ -155,13 +228,64 @@ const Profile = () => {
 
           </div>
 
+          {/* Edit Form */}
+          {isEditing && (
+            <div className="mt-8 bg-gray-50 p-6 rounded-xl">
+
+              <h2 className="text-xl font-bold mb-4">
+                Edit Profile
+              </h2>
+
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Name"
+                className="w-full border p-3 rounded-lg mb-3"
+              />
+
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Phone"
+                className="w-full border p-3 rounded-lg mb-3"
+              />
+
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="w-full border p-3 rounded-lg mb-3"
+              />
+
+              {file && (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="preview"
+                  className="w-32 h-32 rounded-full object-cover mb-4"
+                />
+              )}
+
+              <button
+                onClick={handleUpdateProfile}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+              >
+                Save Changes
+              </button>
+
+            </div>
+          )}
+
           {/* Buttons */}
           <div className="flex justify-center gap-4 mt-8">
 
             <button
+              onClick={() => setIsEditing(!isEditing)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
             >
-              Edit Profile
+              {isEditing ? "Cancel" : "Edit Profile"}
             </button>
 
             <button
