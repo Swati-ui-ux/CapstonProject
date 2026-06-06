@@ -1,16 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux"
 import { toast } from "react-toastify";
 
 const MyRoom = () => {
   const [rooms, setRooms] = useState([]); // ✅ array fix
   const [loading, setLoading] = useState(true);
   const [payments, setPayments] = useState([]);
+  const token = localStorage.getItem("token");
 
- 
+  const user = useSelector(state => state.user.user)
+  console.log("user",user)
 const getPayments = async () => {
     try {
-      const token = localStorage.getItem("token");
+     
 
       const response = await axios.get(
         "http://localhost:9000/payment/my-payments",
@@ -25,7 +28,7 @@ const getPayments = async () => {
      console.log("payment data",data)
     if (!data || data.length === 0) {
       setPayments([]);
-      toast.info("No payment records found");
+      {user?.role==='tenant'&&toast.info("No payment records found")};
       return;
     }
 
@@ -37,7 +40,7 @@ const getPayments = async () => {
 
   const getMyRoom = async () => {
     try {
-      const token = localStorage.getItem("token");
+     
 
       const response = await axios.get(
         "http://localhost:9000/room/my-room",
@@ -59,21 +62,53 @@ const getPayments = async () => {
     }
   };
 
-    const payNow = async (id) => {
-  const token = localStorage.getItem("token");
+const handlePayment = async (payment) => {
 
-  await axios.post(
-    "http://localhost:9000/payment/pay",
-    { paymentId: id },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+  try {
+    // 1. create order
+    const { data } = await axios.post(
+      "http://localhost:9000/payment/create-order",
+      { amount: payment.amount },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // 2. Razorpay options
+    const options = {
+      key: "rzp_test_Sy0OM7nDgy7P8S",
+      amount: data.amount,
+      currency: data.currency,
+      order_id: data.id,
+
+      handler: async function (response) {
+        // 3. verify + update DB
+        await axios.post(
+          "http://localhost:9000/payment/pay",
+          {
+            paymentId: payment.id,
+            razorpay_payment_id: response.razorpay_payment_id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+       toast.success("Payment Successful");
       },
-    }
-  );
+    };
 
-  toast.success("Payment Done");
-  getPayments(); // refresh
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+
+  } catch (error) {
+    console.log(error);
+    alert("Payment failed");
+  }
 };
     
   useEffect(() => {
@@ -91,7 +126,7 @@ const getPayments = async () => {
     );
   }
 
-  if (rooms.length === 0) {
+  if (rooms.length === 0 && user?.role==="tentant") {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <div className="bg-white p-8 rounded-xl shadow-lg text-center">
@@ -105,7 +140,18 @@ const getPayments = async () => {
       </div>
     );
   }
-
+  if (user?.role === "owner"&& rooms.length===0) {
+  return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="bg-white p-8 rounded-xl shadow-lg text-center">
+          
+          <p className="text-gray-500 text-2xl mt-2">
+            This is tenant page owner not allowed.
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
@@ -186,12 +232,13 @@ const getPayments = async () => {
 
       <div className="max-w-5xl mx-auto mt-10">
 
-        <h2 className="text-2xl font-bold mb-4 text-gray-700">
+       
+
+        {payments.length === 0 && user?.role==='tenant' ? (
+          <div className="bg-white p-6 rounded-xl shadow">
+             <h2 className="text-2xl font-bold mb-4 text-gray-700">
           Payment History
         </h2>
-
-        {payments.length === 0 ? (
-          <div className="bg-white p-6 rounded-xl shadow">
             No payments paid
           </div>
         ) : (
@@ -200,6 +247,9 @@ const getPayments = async () => {
               key={payment.id}
               className="bg-white shadow rounded-xl p-5 mb-4"
             >
+               <h2 className="text-2xl font-bold mb-4 text-gray-700">
+          Payment History
+        </h2>
               <h3 className="text-lg font-bold mb-2">
                 Rent Information
               </h3>
@@ -218,7 +268,7 @@ const getPayments = async () => {
                 Status: {payment.status}
                   </p>
                   <button
-                onClick={() => payNow(payment.id)}
+                onClick={() => handlePayment(payment)}
                 className="bg-blue-600 text-white px-4 py-2 rounded"
                 >
                 Pay Rent

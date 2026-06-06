@@ -1,3 +1,4 @@
+const instance = require("../config/razorpay")
 const { Property, Room } = require("../models")
 const Payment = require("../models/payment");
 
@@ -39,7 +40,7 @@ const getMyPayments = async (req,res) => {
 const payRent = async (req, res) => {
   try {
     const { paymentId } = req.body;
-
+   console.log("payment",paymentId)
     const payment = await Payment.findByPk(paymentId);
 
     if (!payment) {
@@ -65,14 +66,31 @@ const payRent = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     res.status(500).json({
       message: "Payment failed",
     });
   }
 };
 
+
+const createOrder = async (req,res) => {
+   try {
+       const options = {
+           amount: req.body.amount * 100,
+           currency: "INR",
+           receipt:"receipt_"+Date.now(),
+       }
+       const order = await instance.orders.create(options);
+       res.json(order)
+   } catch (error) {
+       console.log(error.message);
+       res.status(500).json({ message: "Order creation failed" });
+   }
+}
+
 module.exports = {
     getMyPayments,
     payRent,
+    createOrder
 };

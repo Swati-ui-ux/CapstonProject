@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import Loader from "../components/Loader"
 import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const AddProperty = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const AddProperty = () => {
       description: "",
     image:null,
   });
+  const user = useSelector(state=>state.user.user)
   const navigate = useNavigate()
   const [isLoading,setIsLoading] = useState(false)
   const handleChange = (e) => {
@@ -75,10 +77,22 @@ const AddProperty = () => {
         "Something went wrong"
     );
   }
-};
+  };
+  
+  if (user?.role === 'tenant') {
+  return   <div className="bg-white   p-16 rounded-xl shadow">
+          <h1 className="text-3xl font-bold mb-6">
+        This is owner page 
+      </h1>
+          <p className="text-gray-500">
+            Tenant not allowed
+          </p>
+        </div>
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
+    <>
+    {user?.role==='owner'&& <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
 
         <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
@@ -163,8 +177,12 @@ const AddProperty = () => {
               </form>
              
       </div>
-    </div>
+      </div>}
+      
+    </>
   );
 };
 
-export default AddProperty;
+export default AddProperty
+
+  

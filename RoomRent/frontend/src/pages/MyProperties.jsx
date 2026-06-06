@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 const MyProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const user = useSelector(state => state.user.user);
+  console.log("user",user)
   const getProperties = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -28,26 +30,38 @@ const MyProperties = () => {
   };
 
   useEffect(() => {
-    getProperties();
+    if (user ?. role === "owner") {
+    getProperties()
+    };
   }, []);
 
-  if (loading) {
+  if (user?.role==="owner"&&loading) {
     return (
       <h1 className="text-center mt-10 text-xl">
         Loading...
       </h1>
     );
   }
-
+  if (user?.role === 'tenant') {
+  return   <div className="bg-white   p-16 rounded-xl shadow">
+          <h1 className="text-3xl font-bold mb-6">
+        This is owner page 
+      </h1>
+          <p className="text-gray-500">
+            Tenant not allowed
+          </p>
+        </div>
+  }
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
-      <h1 className="text-3xl font-bold mb-6">
+      
+
+      {properties.length === 0&&user?.role==="owner" ? (
+        <div className="bg-white p-8 rounded-xl shadow">
+          <h1 className="text-3xl font-bold mb-6">
         My Properties
       </h1>
-
-      {properties.length === 0 ? (
-        <div className="bg-white p-8 rounded-xl shadow">
           <p className="text-gray-500">
             No properties added yet.
           </p>
@@ -59,7 +73,10 @@ const MyProperties = () => {
             <div
               key={property.id}
               className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition"
-              >
+            >
+              <h1 className="text-3xl font-bold mb-6">
+        My Properties
+      </h1>
             <img
                 src={property.image}
                 alt={property.propertyName}
