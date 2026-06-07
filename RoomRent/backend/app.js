@@ -16,6 +16,8 @@ const propertyRoute = require("./routes/property")
 const roomRoute = require("./routes/room")
 
 const paymentRoute = require("./routes/payment");
+const dashboardRoutes = require("./routes/dashboard")
+app.use("/dashboard",dashboardRoutes)
 app.use("/payment",paymentRoute);
 
 app.use("/users",userRoute)

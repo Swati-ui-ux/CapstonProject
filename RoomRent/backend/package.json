@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.10.0",
@@ -20,10 +19,12 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "mysql2": "^3.22.4",
+    "nodemailer": "^8.0.10",
     "nodemon": "^3.1.14",
     "razorpay": "^2.9.6",
     "sequelize": "^6.37.8",
     "sib-api-v3-sdk": "^8.5.0",
     "sql": "^0.78.0"
-  }
+  },
+  "description": ""
 }

@@ -36,13 +36,13 @@ function Login() {
     );
 
     localStorage.setItem(
-      "token",
-      res.data.token
+      "email",
+      res.data.email
     );
 
     toast.success(res.data.message);
 
-    navigate("/");
+    navigate("/verify-otp");
   } catch (error) {
     console.log(error);
 

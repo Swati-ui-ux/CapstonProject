@@ -1,54 +1,28 @@
-const SibApiV3Sdk = require("../config/bravo.config");
+require("dotenv").config()
+const transporter = require("../config/transporter")
 
-const sendResetEmail = async (email, resetToken) => {
+const sendResetEmail = async (email, token) => {
   try {
-    const tranEmailApi =
-      new SibApiV3Sdk.TransactionalEmailsApi();
+        const resetLink =
+      `http://localhost:5173/reset-password/${token}`;
 
-    const resetUrl =
-      `http://localhost:5173/reset-password/${resetToken}`;
-
-    await tranEmailApi.sendTransacEmail({
-      sender: {
-        email: "swatigola274@gmail.com",
-        name: "Room Rent App",
-      },
-
-      to: [
-        {
-          email,
-        },
-      ],
-
-      subject: "Reset Your Password",
-
-      htmlContent: `
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset Request",
+      html: `
         <h2>Password Reset</h2>
-
-        <p>You requested a password reset.</p>
-
-        <p>
-          Click below link to reset password:
-        </p>
-
-        <a href="${resetUrl}">
+        <p>Click the link below to reset your password:</p>
+        <a href="${resetLink}">
           Reset Password
         </a>
-
-        <p>
-          This link will expire in 15 minutes.
-        </p>
+        <p>This link will expire in 15 minutes.</p>
       `,
     });
 
     console.log("Reset email sent");
   } catch (error) {
-      console.log("Error",error.message)
-    console.log(
-      "Email Error:",
-      error.response?.body || error.message
-    );
-
+    console.log(error);
     throw error;
   }
 };

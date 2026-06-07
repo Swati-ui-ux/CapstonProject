@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 
 const MyProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = useSelector(state => state.user.user);
-  console.log("user",user)
+  const navigate = useNavigate()
   const getProperties = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -106,7 +106,15 @@ const MyProperties = () => {
                 className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg"
                 >
                 View Details
-                </Link>
+              </Link>
+              <button
+          onClick={() =>
+            navigate(`/edit-property/${property.id}`)
+          }
+          className="bg-blue-500 text-right mx-4 text-white px-4 py-2 rounded"
+        >
+          Edit
+        </button>
             </div>
           ))}
         </div>

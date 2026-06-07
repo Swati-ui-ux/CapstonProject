@@ -83,5 +83,37 @@ async (req, res) => {
         "Something went wrong",
     });
   }
-};
-module.exports = {createProperty,getMyProperties,getPropertyById}
+  };
+
+const updateProperty = async (req, res) => {
+try {
+  const property = await Property.findByPk(req.params.id)
+  if (req.file) {
+  const cloudinaryResponse =
+    await uploadOnCloudinary(
+      req.file.path
+    );
+
+  if (cloudinaryResponse) {
+    property.image =
+      cloudinaryResponse.secure_url;
+  }
+}
+
+
+await property.save();
+
+   res.status(200).json({
+      message: "Property Updated Successfully",
+      property,
+    });
+} catch (error) {
+   console.log(error.message);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+}
+
+module.exports = {createProperty,getMyProperties,getPropertyById,updateProperty}

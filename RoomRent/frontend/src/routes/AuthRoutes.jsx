@@ -18,6 +18,9 @@ import OwnerRoute from "./OwnerRoute";
 import TenantRoute from "./TenantRoute";
 import ForgotPassword from "../auth/ForgotPassword"
 import ResetPassword from "../auth/ResetPassword"
+import OwnerDashboard from "../pages/OwnerDashboard"
+import EditProperty from "../pages/EditProperty"
+import VerifyOtp from "../auth/VerifyOtp"
 const AuthRoutes = () => {
   return (
     <>
@@ -30,7 +33,9 @@ const AuthRoutes = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/verify-otp" element={<VerifyOtp />}
+/>
         {/* Protected */}
 
         <Route
@@ -85,6 +90,24 @@ const AuthRoutes = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <OwnerRoute>
+                <OwnerDashboard />
+              </OwnerRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+  path="/edit-property/:id"
+          element={<ProtectedRoute>
+            <OwnerRoute>
+            <EditProperty/>
+            </OwnerRoute>
+          </ProtectedRoute>}
+/>
 
         {/* Tenant Only */}
 

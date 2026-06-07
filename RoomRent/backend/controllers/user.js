@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const { uploadOnCloudinary } = require("../utils/cloudinary")
 const crypto = require("crypto");
 const sendResetEmail = require("../utils/sendResetEmail");
+const sendOtpEmail = require("../utils/sendOtpEmail")
 
 const signUpUser = async (req, res) => {
   try {
@@ -59,7 +60,7 @@ const loginUser = async (req,res) => {
       const { email, password } = req.body
       console.log("password",password)
       const user = await User.findOne({ where: { email } })
-      console.log("User =>", user);
+     
          if (!user) {
         return res.status(404).json({ message: "User not found" })
         }
@@ -68,19 +69,66 @@ const loginUser = async (req,res) => {
           return res.status(401).json({ message: "Invalid password" })
         
       }
-      console.log("Password Match =>", isMatch);
-        const token = jwt.sign(
-  { id: user.id, email: user.email },
-  process.env.SECRET_KEY,
-  { expiresIn: "7d" }
-)
-        res.status(200).json({message:"login success",token,user})
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      user.otp = otp;
+      await user.save();
+      
+      console.log("OTP for login:", otp);
+      await sendOtpEmail(
+        user.email,
+        otp
+      );
+        return res.status(200).json({
+      message:
+        "OTP sent successfully",
+      email: user.email,
+    });
     } catch (error) {
         console.log(error.message)
          res.status(500).json({message:"error in login "})
     }
 }
 
+const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body
+    
+    const user = await User.findOne({ where: { email } })
+    console.log("Verifying OTP for user:", user ? user.email : "User not found")
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
+    
+    if (user.otp !== otp) {
+      return res.status(401).json({ message: "Invalid OTP" })
+    }
+    if (new Date(user.orpExpiry) < new Date()) {
+    return res.status(400).json({
+        message: "OTP Expired",
+      });
+    }
+    
+    const token = jwt.sign(
+      { id: user.id },
+      process.env.SECRET_KEY,
+      {expiresIn: "7d"}
+    )
+    user.otp = null;
+    user.otpExpiry = null;
+    await user.save();
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+    })
+   
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({ message: "Error in OTP verification" })
+  }
+}
+    
+    
+    
 const getProfile = async(req,res) => {
 try {
     console.log("user id", req.userId)
@@ -254,5 +302,7 @@ const resetPassword = async (req, res) => {
       message: "Server Error",
     });
   }
-};
-module.exports = {signUpUser,loginUser,getProfile,getTenants,updateUser,forgotPassword,resetPassword}
+  };
+  
+module.exports = {
+  signUpUser, loginUser, getProfile, getTenants, updateUser, forgotPassword, resetPassword, verifyOtp}

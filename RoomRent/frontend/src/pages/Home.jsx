@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from "../redux/userSlice"
+import OwnerDashboard from "./OwnerDashboard"
 
 const Home = () => {
   // const [user, setUser] = useState(null);
@@ -43,7 +44,8 @@ const dispatch = useDispatch()
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-r from-blue-50 to-purple-100 flex items-center justify-center p-6">
+    <>
+      {user?.role==='tenant'?<div className="min-h-screen bg-linear-to-r from-blue-50 to-purple-100 flex items-center justify-center p-6">
 
       <div className="bg-white shadow-2xl rounded-2xl w-full max-w-md p-8 text-center">
 
@@ -83,7 +85,8 @@ const dispatch = useDispatch()
         )}
 
       </div>
-    </div>
+    </div>:<OwnerDashboard/>}
+    </>
   );
 };
 

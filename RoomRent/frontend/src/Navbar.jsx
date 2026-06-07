@@ -31,7 +31,7 @@ navigate("/login")
 
          
 
-          {user?.image && (
+          {user?.role==='tenant'&&user?.image && (
             <img
               src={user.image}
               alt={user.name}
@@ -80,6 +80,7 @@ navigate("/login")
               >
                 Owner Payments
               </Link>
+              
             </>
           )}
 
