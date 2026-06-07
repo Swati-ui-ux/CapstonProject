@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify";
+import axiosInstance from "../utils/axiosInstance"
 
 const MyRoom = () => {
   const [rooms, setRooms] = useState([]); // ✅ array fix
@@ -15,13 +16,8 @@ const getPayments = async () => {
     try {
      
 
-      const response = await axios.get(
-        "http://localhost:9000/payment/my-payments",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        "/payment/my-payments",
       );
 
        const data = response.data.payments;

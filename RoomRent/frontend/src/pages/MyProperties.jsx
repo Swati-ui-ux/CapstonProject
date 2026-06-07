@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
 import { Link, Navigate, useNavigate } from "react-router-dom"
+import axiosInstance from "../utils/axiosInstance"
 
 const MyProperties = () => {
   const [properties, setProperties] = useState([]);
@@ -12,8 +13,8 @@ const MyProperties = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const response = await axios.get(
-        "http://localhost:9000/property/my-properties",
+      const response = await axiosInstance.get(
+        "/property/my-properties",
         {
           headers: {
             Authorization: `Bearer ${token}`,

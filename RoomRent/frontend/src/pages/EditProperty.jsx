@@ -7,6 +7,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance"
 
 const EditProperty = () => {
   const { id } = useParams();
@@ -32,13 +33,9 @@ const EditProperty = () => {
   const getProperty = async () => {
     try {
       const response =
-        await axios.get(
-          `http://localhost:9000/property/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        await axiosInstance.get(
+          `/property/${id}`,
+          
         );
 
       const property =

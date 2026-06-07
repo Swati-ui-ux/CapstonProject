@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance"
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -18,9 +19,6 @@ const Profile = () => {
 
   const token = localStorage.getItem("token");
 
-  // ==========================
-  // GET PROFILE
-  // ==========================
   const getData = async () => {
     try {
       const response = await axios.get(
@@ -51,17 +49,12 @@ const Profile = () => {
     getData();
   }, []);
 
-  // ==========================
-  // LOGOUT
-  // ==========================
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
-  // ==========================
-  // INPUT CHANGE
-  // ==========================
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -69,16 +62,12 @@ const Profile = () => {
     });
   };
 
-  // ==========================
-  // FILE CHANGE
-  // ==========================
+ 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
-  // ==========================
-  // UPDATE PROFILE
-  // ==========================
+
   const handleUpdateProfile = async () => {
     try {
       const data = new FormData();
@@ -90,8 +79,8 @@ const Profile = () => {
         data.append("image", file);
       }
 
-      const response = await axios.put(
-        "http://localhost:9000/users/update",
+      const response = await axiosInstance.put(
+        "/users/update",
         data,
         {
           headers: {
@@ -118,9 +107,7 @@ const Profile = () => {
     }
   };
 
-  // ==========================
-  // LOADING
-  // ==========================
+
   if (loading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -131,9 +118,7 @@ const Profile = () => {
     );
   }
 
-  // ==========================
-  // NO USER
-  // ==========================
+  
   if (!user) {
     return (
       <div className="h-screen flex justify-center items-center">

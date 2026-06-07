@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom'
+import axiosInstance from '../utils/axiosInstance'
 const ResetPassword = () => {
   const [resetPassword, setResetPassword] = useState('')
     const { token } = useParams()
@@ -8,8 +9,8 @@ const ResetPassword = () => {
   const handleSubmit = async(e) => {
       e.preventDefault()
      try {
-      await axios.post(
-  `http://localhost:9000/users/reset-password/${token}`,
+      await axiosInstance.post(
+  `/users/reset-password/${token}`,
   {
     password: resetPassword,
   }

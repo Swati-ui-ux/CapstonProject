@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import axiosInstance from "../utils/axiosInstance"
 
 const RoomList = ({ propertyId }) => {
   const [rooms, setRooms] = useState([]);
@@ -40,16 +41,9 @@ const RoomList = ({ propertyId }) => {
 
   const getTenants = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:9000/users/tenants",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        "/users/tenants",
       );
-
-      console.log("Tenants =>", response.data);
 
       setTenants(response.data.tenants || []);
     } catch (error) {
@@ -67,17 +61,13 @@ const RoomList = ({ propertyId }) => {
     tenantId
   ) => {
     try {
-      const response = await axios.put(
-        "http://localhost:9000/room/assign-tenant",
+      const response = await axiosInstance.put(
+        "/room/assign-tenant",
         {
           roomId,
           tenantId,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        
       );
 
       toast.success(response.data.message);

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from "../redux/userSlice"
 import OwnerDashboard from "./OwnerDashboard"
+import axiosInstance from "../utils/axiosInstance"
 
 const Home = () => {
   // const [user, setUser] = useState(null);
@@ -12,14 +13,9 @@ const dispatch = useDispatch()
  const user = useSelector((state) => state.user.user);
   const getData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:9000/users/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axiosInstance.get(
+        "/users/profile",
+        );
 
       dispatch(setUser(response.data.user));
     } catch (error) {

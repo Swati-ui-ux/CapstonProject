@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Loader from "../components/Loader"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+import axiosInstance from "../utils/axiosInstance"
 
 const AddProperty = () => {
   const [formData, setFormData] = useState({
@@ -44,16 +45,9 @@ const AddProperty = () => {
       data.append("description", formData.description);
       data.append("image", formData.image);
   setIsLoading(true)
-    const response = await axios.post(
-      "http://localhost:9000/property/create",
+    const response = await axiosInstance.post(
+      "/property/create",
       data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type":
-            "multipart/form-data",
-        },
-      }
     );
 
     console.log(response.data);

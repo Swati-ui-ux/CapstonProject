@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import { loginSuccess } from "../redux/authSlice"
+import axiosInstance from "../utils/axiosInstance"
 
 
 
@@ -23,8 +24,8 @@ function Login() {
   try {
     setLoading(true);
 
-    const res = await axios.post(
-      "http://localhost:9000/users/login",
+    const res = await axiosInstance.post(
+      "/users/login",
       { email, password }
     );
 

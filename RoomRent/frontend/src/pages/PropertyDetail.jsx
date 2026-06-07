@@ -5,6 +5,7 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import RoomList from "./RoomList"
+import axiosInstance from "../utils/axiosInstance"
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -52,8 +53,8 @@ const PropertyDetails = () => {
       const token =
         localStorage.getItem("token");
 
-      const response = await axios.post(
-        "http://localhost:9000/room/create",
+      const response = await axiosInstance.post(
+        "/room/create",
         {
           propertyId: id,
           totalFloors,

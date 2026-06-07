@@ -2,6 +2,7 @@ import axios from "axios"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader"
+import axiosInstance from "../utils/axiosInstance"
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -29,7 +30,6 @@ export default function Signup() {
     }));
   }
   };
-console.log("from sign up ")
  const handleSignup = async (e) => {
   e.preventDefault();
 
@@ -43,14 +43,9 @@ console.log("from sign up ")
     data.append("role", formData.role);
     data.append("image", formData.image);
 setIsLoading(true)
-    const res = await axios.post(
-      "http://localhost:9000/users/signup",
+    const res = await axiosInstance.post(
+      "/users/signup",
       data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
     );
 console.log('data',res)
    setIsLoading(false)
