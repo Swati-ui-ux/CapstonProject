@@ -73,94 +73,100 @@ console.log('data',res)
 };
   return (
     <>
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSignup}
-        className="bg-white p-6 w-80 rounded shadow"
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-300">
+  <form
+    onSubmit={handleSignup}
+    className="bg-white p-6 w-96 rounded-2xl shadow-xl border border-gray-100"
+  >
+    <h2 className="text-2xl font-bold text-center text-blue-600 mb-1">
+      Create Account
+    </h2>
+
+    <p className="text-center text-gray-500 text-sm mb-5">
+      Join Room Rent App
+    </p>
+
+    <input
+      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      placeholder="Full Name"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+      required
+    />
+
+    <input
+      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      placeholder="Phone Number"
+      name="phone"
+      value={formData.phone}
+      onChange={handleChange}
+    />
+
+    <input
+      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      placeholder="Email Address"
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      required
+    />
+
+    <input
+      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      placeholder="Password"
+      type="password"
+      name="password"
+      value={formData.password}
+      onChange={handleChange}
+      required
+    />
+
+    <label className="text-sm font-medium text-gray-600">
+      Profile Image
+    </label>
+
+    <input
+      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg mt-1"
+      type="file"
+      name="image"
+      onChange={handleChange}
+      required
+    />
+
+    <select
+      className="w-full border border-gray-300 p-2.5 mb-4 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      name="role"
+      value={formData.role}
+      onChange={handleChange}
+    >
+      <option value="owner">Owner</option>
+      <option value="tenant">Tenant</option>
+    </select>
+
+    <button
+      type="submit"
+      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold transition"
+    >
+      {isLoading ? (
+        <Loader text="Creating..." />
+      ) : (
+        "Create Account"
+      )}
+    </button>
+
+    <p className="text-sm text-center mt-4 text-gray-600">
+      Already have an account?{" "}
+      <Link
+        to="/login"
+        className="text-blue-600 font-semibold hover:underline"
       >
-        <h2 className="text-xl font-bold mb-4">
-          Signup
-        </h2>
-
-        <input
-          className="w-full border p-2 mb-3"
-          placeholder="Name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          className="w-full border p-2 mb-3"
-          placeholder="Phone Number"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-        />
-
-        <input
-          className="w-full border p-2 mb-3"
-          placeholder="Email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          className="w-full border p-2 mb-3"
-          placeholder="Password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <label> Choose image</label>
-           <input
-          className="w-full border p-2 mb-3"
-          
-          type="file"
-          name="image"
-          // value={formData.image}
-          onChange={handleChange}
-          required
-        />
-
-        <select
-          className="w-full border p-2 mb-3"
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-        >
-          <option value="owner">Owner</option>
-          <option value="tenant">Tenant</option>
-        </select>
-
-        <button
-          type="submit"
-          className="bg-black text-white w-full p-2 mb-3"
-        >
-          {isLoading? (
-    <Loader text="Creating Account..." />
-  ) : (
-    "Create Account"
-  )}
-        </button>
-
-        <p className="text-sm text-center">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 font-semibold"
-          >
-            Login
-          </Link>
-        </p>
-      </form>
-      </div>
+        Login
+      </Link>
+    </p>
+  </form>
+</div>
      
 </>
   );

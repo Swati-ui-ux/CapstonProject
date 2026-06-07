@@ -16,7 +16,8 @@ import Navbar from "../Navbar";
 import ProtectedRoute from "./ProtectedRoute";
 import OwnerRoute from "./OwnerRoute";
 import TenantRoute from "./TenantRoute";
-
+import ForgotPassword from "../auth/ForgotPassword"
+import ResetPassword from "../auth/ResetPassword"
 const AuthRoutes = () => {
   return (
     <>
@@ -28,7 +29,8 @@ const AuthRoutes = () => {
 
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
         {/* Protected */}
 
         <Route

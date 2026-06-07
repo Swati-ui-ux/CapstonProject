@@ -43,7 +43,7 @@ const dispatch = useDispatch()
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-purple-100 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-linear-to-r from-blue-50 to-purple-100 flex items-center justify-center p-6">
 
       <div className="bg-white shadow-2xl rounded-2xl w-full max-w-md p-8 text-center">
 

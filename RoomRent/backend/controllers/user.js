@@ -2,6 +2,8 @@ const User = require("../models/user")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { uploadOnCloudinary } = require("../utils/cloudinary")
+const crypto = require("crypto");
+const sendResetEmail = require("../utils/sendResetEmail");
 
 const signUpUser = async (req, res) => {
   try {
@@ -96,6 +98,7 @@ try {
 }
 }
 
+
 const getTenants = async(req,res) => {
 try {
   const tenants = await User.findAll({
@@ -157,4 +160,99 @@ const updateUser = async (req, res) => {
     });
   }
 };
-module.exports = {signUpUser,loginUser,getProfile,getTenants,updateUser}
+
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const resetToken = crypto
+      .randomBytes(32)
+      .toString("hex");
+
+    user.resetToken = resetToken;
+
+    user.resetTokenExpiry =
+      Date.now() + 15 * 60 * 1000;
+
+    await user.save();
+
+    await sendResetEmail(
+      user.email,
+      resetToken
+    );
+
+    return res.status(200).json({
+      message: "Reset link sent successfully",
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+
+
+const resetPassword = async (req, res) => {
+  try {
+
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        resetToken: token,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid token",
+      });
+    } 
+    if (
+      new Date(user.resetTokenExpiry) <
+      new Date()
+    ) {
+      return res.status(400).json({
+        message: "Token expired",
+      });
+    }
+
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Password reset successful",
+    });
+
+  } catch (error) {
+
+    console.log(error.message);
+
+    return res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
+module.exports = {signUpUser,loginUser,getProfile,getTenants,updateUser,forgotPassword,resetPassword}

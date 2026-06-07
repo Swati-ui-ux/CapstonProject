@@ -23,7 +23,7 @@ navigate("/login")
         
 
         
-        <Link className="flex gap-6 font-medium">
+        <div className="flex gap-6 font-medium">
 
         
 
@@ -86,17 +86,17 @@ navigate("/login")
           {/* Tenant Links */}
 
           {user?.role === "tenant" && (
-            <>
+            
               <Link
                 to="/my-room"
                 className="hover:text-blue-100"
               >
                 My Room
               </Link>
-            </>
+            
           )}
 
-        </Link>
+        </div>
         <button className="px-4 text-xl font-bold cursor-pointer"
         onClick={handleLogout}
         >
