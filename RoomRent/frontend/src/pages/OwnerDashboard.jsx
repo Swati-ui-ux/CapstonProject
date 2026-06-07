@@ -13,19 +13,13 @@ const OwnerDashboard = () => {
   const token =
     localStorage.getItem("token");
 
-  const getStats = async () => {
+const getStats = async () => {
 
     try {
 
       const response =
         await axiosInstance.get(
           "/dashboard/stats",
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          }
         );
 
       setStats(response.data);

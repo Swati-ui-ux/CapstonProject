@@ -15,13 +15,8 @@ const RoomList = ({ propertyId }) => {
 
   const getRooms = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/room/property/${propertyId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        `/room/property/${propertyId}`,
       );
 
       console.log("Rooms =>", response.data);

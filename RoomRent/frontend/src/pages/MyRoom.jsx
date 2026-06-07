@@ -34,20 +34,14 @@ const getPayments = async () => {
     }
   };
 
-  const getMyRoom = async () => {
+const getMyRoom = async () => {
     try {
      
 
-      const response = await axios.get(
-        "http://localhost:9000/room/my-room",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        "/room/my-room"
       );
-
-      setRooms(response.data.room || []); // ✅ safe fallback
+    setRooms(response.data.room || []); // ✅ safe fallback
     } catch (error) {
       console.log(error);
       toast.error(
@@ -62,14 +56,9 @@ const handlePayment = async (payment) => {
 
   try {
     // 1. create order
-    const { data } = await axios.post(
-      "http://localhost:9000/payment/create-order",
+    const { data } = await axiosInstance.post(
+      "/payment/create-order",
       { amount: payment.amount },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
     );
 
     // 2. Razorpay options
@@ -81,8 +70,8 @@ const handlePayment = async (payment) => {
 
       handler: async function (response) {
         // 3. verify + update DB
-        await axios.post(
-          "http://localhost:9000/payment/pay",
+        await axiosInstance.post(
+          "/payment/pay",
           {
             paymentId: payment.id,
             razorpay_payment_id: response.razorpay_payment_id,

@@ -99,20 +99,11 @@ const EditProperty = () => {
       }
 
       const response =
-        await axios.put(
-          `http://localhost:9000/property/update/${id}`,
+        await axiosInstance.put(
+          `/property/update/${id}`,
           data,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-              "Content-Type":
-                "multipart/form-data",
-            },
-          }
         );
 
-      console.log(response.data);
 
       alert(
         "Property Updated Successfully"

@@ -21,8 +21,8 @@ const Profile = () => {
 
   const getData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:9000/users/profile",
+      const response = await axiosInstance.get(
+        "/users/profile",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,12 +82,6 @@ const Profile = () => {
       const response = await axiosInstance.put(
         "/users/update",
         data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
       );
 
       setUser(response.data.user);

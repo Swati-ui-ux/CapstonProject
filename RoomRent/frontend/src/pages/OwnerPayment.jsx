@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
+import axiosInstance from "../utils/axiosInstance"
 
 const OwnerPayments = () => {
 
@@ -13,15 +14,9 @@ const OwnerPayments = () => {
   const getPayments = async () => {
     try {
 
-      const response = await axios.get(
-        "http://localhost:9000/payment/owner-payments",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        "/payment/owner-payments",
       );
-  console.log("Payment res",response)
       setPayments(response.data.payments);
 
     } catch (error) {
