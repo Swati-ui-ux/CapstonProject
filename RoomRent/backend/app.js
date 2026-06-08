@@ -13,7 +13,9 @@ app.use(cors({
     origin: ["http://localhost:5173", process.env.FRONTEND_URL],
     credentials: true,
 }))
-
+app.get("/", (req, res) => {
+    res.send('<h1>Welcome to Room Rent APP</h1>')
+})
 const userRoute = require("./routes/user")
 const propertyRoute = require("./routes/property")
 const roomRoute = require("./routes/room")
