@@ -11,5 +11,5 @@ router.get("/tenants", auth, getTenants)
 router.put("/update", auth, upload.single("image"), updateUser)
 router.post("/forgot-password", forgotPassword)
 router.post("/reset-password/:token", resetPassword)
-router.post("/verify-otp", verifyOtp)
+// router.post("/verify-otp", verifyOtp)
 module.exports = router

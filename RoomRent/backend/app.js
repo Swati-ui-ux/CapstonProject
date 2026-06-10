@@ -2,7 +2,7 @@ const express = require("express")
 
 const app = express()
 const PORT = process.env.PORT || 9000
-// const db = require("./config/db")
+const db = require("./config/db")
 
 require("./models/user")
 require("./models/index")
@@ -28,12 +28,12 @@ app.use("/payment",paymentRoute);
 app.use("/users",userRoute)
 app.use("/property",propertyRoute)
 app.use("/room", roomRoute)
-// db.sync().then(() => {
-// console.log("db alter connect")
-// }).catch((error) => {
-// console.log("Error in db",error)
-// })
-// app.listen(PORT, () => {
-//     console.log(`Server is running ${PORT}`)
-// })
+db.sync().then(() => {
+console.log("db alter connect")
+}).catch((error) => {
+console.log("Error in db",error)
+})
+app.listen(PORT, () => {
+    console.log(`Server is running ${PORT}`)
+})
 module.exports = app

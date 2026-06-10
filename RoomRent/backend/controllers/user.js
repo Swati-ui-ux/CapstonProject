@@ -58,8 +58,9 @@ const loginUser = async (req,res) => {
     
     try {
       const { email, password } = req.body
-      console.log("password",password)
+    
       const user = await User.findOne({ where: { email } })
+     
      
          if (!user) {
         return res.status(404).json({ message: "User not found" })
@@ -69,19 +70,19 @@ const loginUser = async (req,res) => {
           return res.status(401).json({ message: "Invalid password" })
         
       }
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      user.otp = otp;
+    ;
       await user.save();
+      const token = jwt.sign(
+      { id: user.id },
+      process.env.SECRET_KEY,
+      {expiresIn: "7d"}
+    )
       
-      console.log("OTP for login:", otp);
-      await sendOtpEmail(
-        user.email,
-        otp
-      );
         return res.status(200).json({
       message:
         "OTP sent successfully",
       email: user.email,
+      token
     });
     } catch (error) {
         console.log(error.message)
@@ -89,43 +90,43 @@ const loginUser = async (req,res) => {
     }
 }
 
-const verifyOtp = async (req, res) => {
-  try {
-    const { email, otp } = req.body
+// const verifyOtp = async (req, res) => {
+//   try {
+//     const { email, otp } = req.body
     
-    const user = await User.findOne({ where: { email } })
-    console.log("Verifying OTP for user:", user ? user.email : "User not found")
-    if (!user) {
-      return res.status(404).json({ message: "User not found" })
-    }
+//     const user = await User.findOne({ where: { email } })
+//     console.log("Verifying OTP for user:", user ? user.email : "User not found")
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" })
+//     }
     
-    if (user.otp !== otp) {
-      return res.status(401).json({ message: "Invalid OTP" })
-    }
-    if (new Date(user.orpExpiry) < new Date()) {
-    return res.status(400).json({
-        message: "OTP Expired",
-      });
-    }
+//     if (user.otp !== otp) {
+//       return res.status(401).json({ message: "Invalid OTP" })
+//     }
+//     if (new Date(user.orpExpiry) < new Date()) {
+//     return res.status(400).json({
+//         message: "OTP Expired",
+//       });
+//     }
     
-    const token = jwt.sign(
-      { id: user.id },
-      process.env.SECRET_KEY,
-      {expiresIn: "7d"}
-    )
-    user.otp = null;
-    user.otpExpiry = null;
-    await user.save();
-    return res.status(200).json({
-      message: "Login successful",
-      token,
-    })
+//     const token = jwt.sign(
+//       { id: user.id },
+//       process.env.SECRET_KEY,
+//       {expiresIn: "7d"}
+//     )
+//     user.otp = null;
+//     user.otpExpiry = null;
+//     await user.save();
+//     return res.status(200).json({
+//       message: "Login successful",
+//       token,
+//     })
    
-  } catch (error) {
-    console.log(error.message)
-    res.status(500).json({ message: "Error in OTP verification" })
-  }
-}
+//   } catch (error) {
+//     console.log(error.message)
+//     res.status(500).json({ message: "Error in OTP verification" })
+//   }
+// }
     
     
     
@@ -213,7 +214,7 @@ const updateUser = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-
+    console.log("Forgot password request for email:", email);
     const user = await User.findOne({
       where: { email },
     });
@@ -245,7 +246,7 @@ const forgotPassword = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
 
     return res.status(500).json({
       message: "Server Error",
@@ -305,4 +306,4 @@ const resetPassword = async (req, res) => {
   };
   
 module.exports = {
-  signUpUser, loginUser, getProfile, getTenants, updateUser, forgotPassword, resetPassword, verifyOtp}
+  signUpUser, loginUser, getProfile, getTenants, updateUser, forgotPassword, resetPassword}

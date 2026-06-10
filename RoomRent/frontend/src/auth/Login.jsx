@@ -40,10 +40,13 @@ function Login() {
       "email",
       res.data.email
     );
-
+    localStorage.setItem(
+      "token",
+      res.data.token
+    );
     toast.success(res.data.message);
 
-    navigate("/verify-otp");
+    navigate("/");
   } catch (error) {
     console.log(error);
 
