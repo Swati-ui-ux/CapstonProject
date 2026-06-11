@@ -10,7 +10,9 @@ const cors = require("cors")
 app.use(express.json({limit:'50mb'}));
 app.use(express.urlencoded({ extended: true ,limit:"50mb"}));
 app.use(cors({
-    origin: ["http://localhost:5173", process.env.FRONTEND_URL],
+    origin: ["http://localhost:5173",
+"http://localhost:5174",
+        process.env.FRONTEND_URL],
     credentials: true,
 }))
 app.get("/", (req, res) => {
