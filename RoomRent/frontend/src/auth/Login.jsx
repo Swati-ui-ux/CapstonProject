@@ -1,6 +1,6 @@
 import axios from "axios"
 import React, { useState } from "react";
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import { loginSuccess } from "../redux/authSlice"
@@ -17,7 +17,9 @@ function Login() {
   const [loading, setLoading] = useState(false);
   
   const dispatch = useDispatch()
-
+const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
   const handleLogin = async (e) => {
   e.preventDefault();
 
@@ -85,7 +87,7 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={darkMode ? "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"}
           />
         </div>
 
@@ -100,20 +102,24 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={darkMode ? "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"} 
             />
             
         </div>
         <Link
   to="/forgot-password"
-  className="text-center block mt-2 text-sm text-blue-600 hover:text-blue-800 hover:underline transition duration-200"
+  className={darkMode ? "text-center block mt-2 text-sm text-blue-400 hover:text-blue-300 hover:underline transition duration-200" : "text-center block mt-2 text-sm text-blue-600 hover:text-blue-800 hover:underline transition duration-200"}
 >
   Forgot Password?
 </Link>
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300 disabled:bg-gray-400"
+          className={
+  darkMode
+    ? "w-full mt-2 bg-black hover:bg-gray-900 text-white font-semibold py-3 rounded-lg"
+    : "w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg"
+}
         >
           {loading ? "Logging in..." : "Login"}
         </button>
@@ -128,7 +134,7 @@ function Login() {
 
         <Link
           to="/signup"
-          className="text-blue-600 font-bold hover:text-blue-800"
+          className={darkMode ? "text-blue-400 font-bold hover:text-blue-300" : "text-blue-600 font-bold hover:text-blue-800"}
         >
           Create Account
         </Link>

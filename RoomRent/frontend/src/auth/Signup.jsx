@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader"
 import axiosInstance from "../utils/axiosInstance"
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux"
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -14,6 +15,10 @@ export default function Signup() {
     role: "tenant",
   });
   const [isLoading, setIsLoading] = useState(false)
+  const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
+  
   const navigate = useNavigate()
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
@@ -74,16 +79,16 @@ console.log('data',res)
     onSubmit={handleSignup}
     className="bg-white p-6 w-96 rounded-2xl shadow-xl border border-gray-100"
   >
-    <h2 className="text-2xl font-bold text-center text-blue-600 mb-1">
+    <h2 className={darkMode ? "text-2xl font-bold text-center text-black mb-1" : "text-2xl font-bold text-center text-blue-600 mb-1"}>
       Create Account
     </h2>
 
-    <p className="text-center text-gray-500 text-sm mb-5">
+    <p className={darkMode ? "text-center text-gray-500 text-sm mb-5" : "text-center text-gray-500 text-sm mb-5"}>
       Join Room Rent App
     </p>
 
     <input
-      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"} 
       placeholder="Full Name"
       name="name"
       value={formData.name}
@@ -92,7 +97,7 @@ console.log('data',res)
     />
 
     <input
-      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
       placeholder="Phone Number"
       name="phone"
       value={formData.phone}
@@ -100,7 +105,7 @@ console.log('data',res)
     />
 
     <input
-      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
       placeholder="Email Address"
       type="email"
       name="email"
@@ -110,7 +115,7 @@ console.log('data',res)
     />
 
     <input
-      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
       placeholder="Password"
       type="password"
       name="password"
@@ -124,7 +129,7 @@ console.log('data',res)
     </label>
 
     <input
-      className="w-full border border-gray-300 p-2.5 mb-3 rounded-lg mt-1"
+      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg mt-1 bg-gray-700 text-white" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg mt-1"}
       type="file"
       name="image"
       onChange={handleChange}
@@ -132,7 +137,7 @@ console.log('data',res)
     />
 
     <select
-      className="w-full border border-gray-300 p-2.5 mb-4 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
+      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-4 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white" : "w-full border border-gray-300 p-2.5 mb-4 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
       name="role"
       value={formData.role}
       onChange={handleChange}
@@ -143,7 +148,7 @@ console.log('data',res)
 
     <button
       type="submit"
-      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold transition"
+      className={darkMode ? "w-full bg-black hover:bg-gray-900 cursor-alias text-white py-2.5 rounded-lg font-semibold transition" : "w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold transition"}
     >
       {isLoading ? (
         <Loader text="Creating..." />
@@ -152,11 +157,11 @@ console.log('data',res)
       )}
     </button>
 
-    <p className="text-sm text-center mt-4 text-gray-600">
+    <p className={darkMode ? "text-sm text-center mt-4 text-gray-400" : "text-sm text-center mt-4 text-gray-600"}>
       Already have an account?{" "}
       <Link
         to="/login"
-        className="text-blue-600 font-semibold hover:underline"
+       className={darkMode ? "text-blue-400 font-bold hover:text-blue-300" : "text-blue-600 font-bold hover:text-blue-800"}
       >
         Login
       </Link>

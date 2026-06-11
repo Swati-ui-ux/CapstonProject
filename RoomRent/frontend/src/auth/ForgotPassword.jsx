@@ -3,11 +3,15 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import axiosInstance from '../utils/axiosInstance'
 import Loader from '../components/Loader'
+import { useSelector } from 'react-redux'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   const [isSending, setIsSending] = useState(false)
+  const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -33,7 +37,7 @@ setMessage(res.data.message);
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-2xl shadow-lg w-80"
       >
-        <h2 className="text-2xl font-bold text-center mb-6">
+        <h2 className={darkMode ? "text-2xl font-bold text-center mb-6 text-black" : "text-2xl font-bold text-center mb-6 text-blue-600"} >
           Forgot Password
         </h2>
 
@@ -48,7 +52,7 @@ setMessage(res.data.message);
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200"
+          className={darkMode ? "w-full bg-black hover:bg-gray-900 text-white p-3 rounded-lg font-semibold transition" : "w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200"}
         >
          {isSending?<Loader size={20} text="Sending..."color="#fff"/>:"Send Reset Link"}
         </button>

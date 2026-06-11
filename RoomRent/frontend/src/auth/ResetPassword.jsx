@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import axios from "axios"
 import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../utils/axiosInstance'
+import { useSelector } from 'react-redux'
 const ResetPassword = () => {
   const [resetPassword, setResetPassword] = useState('')
     const { token } = useParams()
-    const navigate = useNavigate()
+  const navigate = useNavigate()
+  const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
   const handleSubmit = async(e) => {
       e.preventDefault()
      try {
@@ -22,7 +26,7 @@ const ResetPassword = () => {
      }
     // console.log(resetPassword)
   }
-
+ 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       
@@ -30,7 +34,7 @@ const ResetPassword = () => {
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded-2xl shadow-lg w-80"
       >
-        <h2 className="text-2xl font-bold text-center mb-6">
+        <h2 className={darkMode ? "text-2xl font-bold text-center mb-6 text-black" : "text-2xl font-bold text-center mb-6 text-blue-600"} >
           Reset Password
         </h2>
 
@@ -44,7 +48,7 @@ const ResetPassword = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200"
+          className={darkMode ? "w-full bg-black hover:bg-gray-900 text-white p-3 rounded-lg font-semibold transition" : "w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200"}
         >
           Reset Password
         </button>
