@@ -8,11 +8,13 @@ import {
   useParams,
 } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance"
-
+import { useSelector } from "react-redux";
 const EditProperty = () => {
   const { id } = useParams();
-
   const navigate = useNavigate();
+const darkMode = useSelector(
+  (state) => state.theme.darkMode
+);
 
   const [loading, setLoading] =
     useState(false);

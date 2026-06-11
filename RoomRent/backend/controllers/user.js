@@ -311,5 +311,45 @@ const resetPassword = async (req, res) => {
   }
   };
   
+
+const findAllOwners = async (req, res) => {
+  try {
+    const owners = await User.findAll({
+      where: {
+        role: "owner",
+      },
+      attributes: [
+        "id",
+        "name",
+        "email",
+        "image",
+      ],
+      include: [
+        {
+          model: Property,
+          attributes: [
+            "id",
+            "propertyName",
+            "location",
+            "description",
+            "image",
+          ],
+        },
+      ],
+    });
+
+    res.status(200).json({
+      message: "Success",
+      owners,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};
 module.exports = {
-  signUpUser, loginUser, getProfile, getTenants, updateUser, forgotPassword, resetPassword}
+  signUpUser, loginUser, getProfile, getTenants, updateUser, forgotPassword, resetPassword, findAllOwners}

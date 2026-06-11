@@ -48,7 +48,7 @@ const darkMode = useSelector(
     );
     toast.success(res.data.message);
 
-    navigate("/");
+    navigate("/home");
   } catch (error) {
     console.log(error);
 

@@ -21,6 +21,8 @@ import ResetPassword from "../auth/ResetPassword"
 import OwnerDashboard from "../pages/OwnerDashboard"
 import EditProperty from "../pages/EditProperty"
 import VerifyOtp from "../auth/VerifyOtp"
+
+import OwnersList from "../components/OwnerList";
 const AuthRoutes = () => {
   return (
     <>
@@ -29,9 +31,10 @@ const AuthRoutes = () => {
       <Routes>
 
         {/* Public Routes */}
-
+       <Route path="/" element={<OwnersList />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/owners' element={<OwnersList />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/verify-otp" element={<VerifyOtp />}
@@ -39,7 +42,7 @@ const AuthRoutes = () => {
         {/* Protected */}
 
         <Route
-          path="/"
+          path="/home"
           element={
             <ProtectedRoute>
               <Home />

@@ -1,5 +1,5 @@
 const express = require("express")
-const { signUpUser, loginUser,getProfile, getTenants, updateUser, forgotPassword, resetPassword, verifyOtp } = require("../controllers/user")
+const { signUpUser, loginUser,getProfile, getTenants, updateUser, forgotPassword, resetPassword, findAllOwners } = require("../controllers/user")
 const upload = require("../middleware/multer")
 const auth = require("../middleware/auth")
 const router = express.Router()
@@ -12,4 +12,5 @@ router.put("/update", auth, upload.single("image"), updateUser)
 router.post("/forgot-password", forgotPassword)
 router.post("/reset-password/:token", resetPassword)
 // router.post("/verify-otp", verifyOtp)
+router.get("/owners",findAllOwners)
 module.exports = router
