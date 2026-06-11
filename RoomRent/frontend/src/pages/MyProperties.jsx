@@ -15,11 +15,6 @@ const MyProperties = () => {
 
       const response = await axiosInstance.get(
         "/property/my-properties",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
       );
 
       setProperties(response.data.properties);
@@ -29,7 +24,9 @@ const MyProperties = () => {
       setLoading(false);
     }
   };
-
+ const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
   useEffect(() => {
     if (user ?. role === "owner") {
     getProperties()
@@ -43,16 +40,7 @@ const MyProperties = () => {
       </h1>
     );
   }
-  if (user?.role === 'tenant') {
-  return   <div className="bg-white   p-16 rounded-xl shadow">
-          <h1 className="text-3xl font-bold mb-6">
-        This is owner page 
-      </h1>
-          <p className="text-gray-500">
-            Tenant not allowed
-          </p>
-        </div>
-  }
+ 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
@@ -104,7 +92,15 @@ const MyProperties = () => {
                   </div>
                   <Link
                 to={`/property/${property.id}`}
-                className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg"
+                className={`
+                  mt-4 
+                  inline-block 
+                  ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
+                  text-white 
+                  px-4 
+                  py-2 
+                  rounded-lg
+                `}
                 >
                 View Details
               </Link>
@@ -112,7 +108,15 @@ const MyProperties = () => {
           onClick={() =>
             navigate(`/edit-property/${property.id}`)
           }
-          className="bg-blue-500 text-right mx-4 text-white px-4 py-2 rounded"
+          className={`
+            ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-500 hover:bg-blue-600"} 
+            text-right 
+            mx-4 
+            text-white 
+            px-4 
+            py-2 
+            rounded
+          `}
         >
           Edit
         </button>

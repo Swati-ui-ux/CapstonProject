@@ -6,6 +6,7 @@ import React, {
 import { useParams } from "react-router-dom";
 import RoomList from "./RoomList"
 import axiosInstance from "../utils/axiosInstance"
+import { useSelector } from "react-redux"
 
 const PropertyDetails = () => {
   const { id } = useParams();
@@ -41,7 +42,9 @@ const PropertyDetails = () => {
       console.log(error);
     }
   };
-
+const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
   useEffect(() => {
     getProperty();
   }, []);
@@ -113,7 +116,12 @@ const PropertyDetails = () => {
 
           <hr className="my-6" />
 
-          <h2 className="text-2xl font-bold mb-4">
+          <h2 className={`
+            text-2xl 
+            font-bold 
+            mb-4 
+            
+          `}>
             Generate Rooms
           </h2>
 
@@ -161,7 +169,13 @@ const PropertyDetails = () => {
             />
 
             <button
-              className="w-full bg-blue-600 text-white py-3 rounded-lg"
+              className={`
+                w-full 
+                ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
+                text-white 
+                py-3 
+                rounded-lg
+              `}
             >
               Generate Rooms
             </button>

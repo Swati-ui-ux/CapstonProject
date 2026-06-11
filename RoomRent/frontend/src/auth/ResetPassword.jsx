@@ -9,13 +9,13 @@ const ResetPassword = () => {
   const handleSubmit = async(e) => {
       e.preventDefault()
      try {
-      await axiosInstance.post(
+     const res =  await axiosInstance.post(
   `/users/reset-password/${token}`,
   {
     password: resetPassword,
   }
 );
-         navigate("/")
+         navigate("/login")
          console.log(res)
      } catch (error) {
         console.log("Error",error)

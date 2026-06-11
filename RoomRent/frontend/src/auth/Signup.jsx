@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader"
 import axiosInstance from "../utils/axiosInstance"
-
+import { toast } from "react-toastify";
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -62,6 +62,7 @@ console.log('data',res)
 
     // setPreview("");
   } catch (error) {
+    error.response && toast.error(error.response.data.message);
     console.log(error);
     setIsLoading(false)
   }

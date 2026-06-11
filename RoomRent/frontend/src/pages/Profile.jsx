@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance"
+import { useSelector } from "react-redux"
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -16,7 +17,9 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const navigate = useNavigate();
-
+ const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
   const token = localStorage.getItem("token");
 
   const getData = async () => {
@@ -128,7 +131,7 @@ const Profile = () => {
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg overflow-hidden">
 
         {/* Header */}
-        <div className="h-40 bg-linear-to-r from-blue-500 to-purple-600"></div>
+        <div className={`h-40 ${darkMode ? "bg-linear-to-r from-slate-600 to-slate-900" : "bg-linear-to-r from-blue-400 to-blue-500"}`}></div>
 
         <div className="relative px-6 pb-6">
 
@@ -262,7 +265,13 @@ const Profile = () => {
 
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+              className={`
+                ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
+                text-white 
+                px-6 
+                py-2 
+                rounded-lg
+              `}
             >
               {isEditing ? "Cancel" : "Edit Profile"}
             </button>

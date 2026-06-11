@@ -5,6 +5,7 @@ import React, {
 } from "react";
 import axiosInstance from "../utils/axiosInstance"
 
+
 const OwnerDashboard = () => {
 
   const [stats, setStats] =
@@ -42,19 +43,24 @@ const getStats = async () => {
     );
   }
 
+
+
+
   return (
   <div className="p-6 bg-gray-100 min-h-screen">
-
+      
+    
     <h1 className="text-3xl font-bold mb-8 text-gray-800">
       Owner Dashboard
-    </h1>
-
+      </h1>
+      
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
       <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
         <h2 className="text-sm font-medium text-gray-500">
           Total Properties
-        </h2>
+          </h2>
+          
         <p className="text-2xl font-bold text-blue-600 mt-2">
           {stats.totalProperties}
         </p>

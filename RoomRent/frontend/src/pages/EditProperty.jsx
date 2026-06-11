@@ -128,7 +128,13 @@ const EditProperty = () => {
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
 
-        <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
+        <h1 className={`
+          text-3xl 
+          font-bold 
+          text-center 
+          mb-6 
+          ${darkMode ? "text-slate-900" : "text-blue-600"}
+        `}>
           Edit Property
         </h1>
 
@@ -211,7 +217,14 @@ const EditProperty = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+            className={`
+              w-full 
+              ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
+              text-white 
+              py-3 
+              rounded-lg 
+              transition
+            `}
           >
             {loading
               ? "Updating..."

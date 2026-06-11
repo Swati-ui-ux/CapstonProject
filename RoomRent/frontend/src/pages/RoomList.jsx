@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../utils/axiosInstance"
+import { useSelector } from "react-redux"
 
 const RoomList = ({ propertyId }) => {
   const [rooms, setRooms] = useState([]);
@@ -79,7 +80,9 @@ const RoomList = ({ propertyId }) => {
       );
     }
   };
-
+ const darkMode = useSelector(
+    (state) => state.theme.darkMode
+  );
   useEffect(() => {
     if (propertyId) {
       getRooms();
@@ -100,11 +103,24 @@ const RoomList = ({ propertyId }) => {
     <div className="mt-10 bg-white rounded-2xl shadow-xl p-6">
 
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-blue-600">
+        <h2 className={`
+          text-3xl 
+          font-bold 
+          ${darkMode ? "text-slate-900" : "text-blue-600"}
+        `} >
           Rooms & Floors
         </h2>
 
-        <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-medium">
+        <span className={
+`
+          bg-blue-100 
+          text-blue-700
+&{} 
+          px-4 
+          py-2 
+          rounded-full 
+          font-medium
+        `}>
           Total Rooms: {rooms.length}
         </span>
       </div>
@@ -130,7 +146,17 @@ const RoomList = ({ propertyId }) => {
             className="mb-8"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex justify-center items-center font-bold">
+              <div className={`
+                w-10 
+                h-10 
+                rounded-full 
+               ${darkMode ? "bg-slate-700" : "bg-blue-600"} 
+                text-white 
+                flex 
+                justify-center 
+                items-center 
+                font-bold
+              `}>
                 {floor}
               </div>
 
@@ -158,12 +184,14 @@ const RoomList = ({ propertyId }) => {
                       </h4>
 
                       <span
-                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                          room.status ===
-                          "available"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
+                        className={`
+                          px-3 
+                          py-1 
+                          rounded-full 
+                          text-sm 
+                          font-semibold 
+                          ${darkMode ? "bg-slate-700 text-slate-300" : "bg-blue-100 text-blue-700"}
+                        `}
                       >
                         {room.status}
                       </span>
@@ -211,7 +239,15 @@ const RoomList = ({ propertyId }) => {
                           );
                           getTenants();
                         }}
-                        className="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+                        className={`
+                          w-full 
+                          mt-5 
+                          ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
+                          text-white 
+                          py-2 
+                          rounded-lg 
+                          transition
+                        `}
                       >
                         Assign Tenant
                       </button>

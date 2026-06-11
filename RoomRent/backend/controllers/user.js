@@ -8,15 +8,21 @@ const sendOtpEmail = require("../utils/sendOtpEmail")
 
 const signUpUser = async (req, res) => {
   try {
-    // console.log("Body:", req.body);
-    // console.log("File:", req.file);
+   
 
     const { name, email, password, phone, role } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     let imageUrl = "";
+    const emailExists = await User.findOne({ where: { email } });
 
+    if (emailExists) {
+      return res.status(400).json({
+        message: "Email already exists",
+      });
+    }
+    
     if (req.file) {
       const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
 
@@ -37,7 +43,7 @@ const signUpUser = async (req, res) => {
       role,
       image: imageUrl,
     });
-console.log("User ---->",user)
+
     return res.status(201).json({
       message: "User signup successfully",
       user,
@@ -80,7 +86,7 @@ const loginUser = async (req,res) => {
       
         return res.status(200).json({
       message:
-        "OTP sent successfully",
+        "Login Successful",
       email: user.email,
       token
     });
@@ -132,14 +138,14 @@ const loginUser = async (req,res) => {
     
 const getProfile = async(req,res) => {
 try {
-    console.log("user id", req.userId)
+   
     const user = await User.findByPk(req.userId, {
     
      attributes: {
     exclude: ["password", "resetToken", "resetTokenExpiry"],
   },
     })
-    console.log(user)
+   
     res.status(200).json({user,message:"get user success",user})
 } catch (error) {
     console.log("Error",error.message)
@@ -214,7 +220,7 @@ const updateUser = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log("Forgot password request for email:", email);
+  
     const user = await User.findOne({
       where: { email },
     });

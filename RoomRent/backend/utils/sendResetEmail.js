@@ -1,6 +1,5 @@
 require("dotenv").config()
 const transporter = require("../config/transporter")
-console.log("emial dotenv",process.env.EMAIL_USER)
 const sendResetEmail = async (email, token) => {
   try {
         const resetLink =
