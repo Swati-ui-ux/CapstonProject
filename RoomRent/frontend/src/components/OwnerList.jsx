@@ -3,6 +3,7 @@ import axiosInstance from "../utils/axiosInstance";
 
 const OwnersList = () => {
   const [owners, setOwners] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getOwners();
@@ -10,57 +11,97 @@ const OwnersList = () => {
 
   const getOwners = async () => {
     try {
-      const response = await axiosInstance.get(
-        "/users/owners"
-      );
-
+      const response = await axiosInstance.get("/users/owners");
       setOwners(response.data.owners);
-      console.log(response.data.owners);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-5">
-      <h1 className="text-3xl font-bold mb-5">
-        Property Owners
-      </h1>
+  <div className="min-h-screen bg-gray-100 p-6">
+  <h1 className="text-3xl font-bold mb-6">
+    Property Owners
+  </h1>
 
-      <div className="grid md:grid-cols-3 gap-5">
-        {owners.map((owner) => (
-          <div
-            key={owner.id}
-            className="bg-white p-5 rounded shadow"
-          >
-            <h2 className="font-bold text-xl">
-              {owner.name}
-            </h2>
+  <div className="space-y-8">
+    {owners.map((owner) => (
+      <div
+        key={owner.id}
+        className="bg-white rounded-xl shadow-md p-6"
+      >
+        {/* Owner Info */}
+        <div className="flex items-center gap-4 border-b pb-3 mb-4">
+          <img
+            src={owner.image}
+            alt={owner.name}
+            className="w-14 h-14 rounded-full object-cover border"
+          />
 
-            <p>{owner.email}</p>
+          <div>
+           <h2 className="text-lg font-bold">
+            {owner.name}
+        </h2>
 
-            <h3 className="mt-3 font-semibold">
-              Properties:
-            </h3>
+        <p className="text-sm text-gray-600">
+          📧 {owner.email}
+        </p>
 
-            {owner.Properties?.map((property) => (
+        <p className="text-sm text-gray-600">
+          📱 {owner.phone || "Not Available"}
+        </p>
+
+            <p className="text-sm text-gray-500 mt-1">
+              Total Properties:
+              {" "}
+              {owner.Properties?.length || 0}
+            </p>
+          </div>
+        </div>
+
+        {/* Properties */}
+        <h3 className="text-xl font-semibold mb-4">
+          Properties
+        </h3>
+
+        {owner.Properties?.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {owner.Properties.map((property) => (
               <div
                 key={property.id}
-                className="border p-2 rounded mt-2"
+                className="bg-white rounded-xl shadow p-3 hover:shadow-lg transition"
               >
-                <p>
+                <img
+                  src={property.image}
+                  alt={property.propertyName}
+                  className="w-full h-36 object-cover rounded-lg mb-3"
+                />
+
+                <h4 className="font-bold text-lg">
                   {property.propertyName}
+                </h4>
+
+                <p className="text-gray-600">
+                  📍 {property.location}
                 </p>
 
-                <p>
-                  {property.location}
-                </p>
+               <p className="text-sm text-gray-500 mt-1 truncate">
+                {property.description}
+              </p>
               </div>
             ))}
           </div>
-        ))}
+        ) : (
+          <div className="bg-gray-50 border rounded-lg p-6 text-center text-gray-500">
+            No properties added yet.
+          </div>
+        )}
       </div>
-    </div>
+    ))}
+  </div>
+</div>
   );
 };
 

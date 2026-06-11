@@ -15,7 +15,7 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-  
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const dispatch = useDispatch()
 const darkMode = useSelector(
     (state) => state.theme.darkMode
@@ -91,21 +91,36 @@ const darkMode = useSelector(
           />
         </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">
-            Password
-          </label>
+       <div className="mb-6">
+  <label className="block text-gray-700 font-medium mb-2">
+    Password
+  </label>
 
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className={darkMode ? "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"} 
-            />
-            
-        </div>
+  <div className="relative">
+    <input
+      type={isShowPassword ? "text" : "password"}
+      placeholder="Enter your password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      required
+      className={
+        darkMode
+          ? "w-full border border-gray-300 rounded-lg p-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder:text-gray-300"
+          : "w-full border border-gray-300 rounded-lg p-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      }
+    />
+
+    <button
+      type="button"
+      onClick={() =>
+        setIsShowPassword(!isShowPassword)
+      }
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+    >
+      {isShowPassword ? "🙈" : "👁️"}
+    </button>
+  </div>
+</div>
         <Link
   to="/forgot-password"
   className={darkMode ? "text-center block mt-2 text-sm text-blue-400 hover:text-blue-300 hover:underline transition duration-200" : "text-center block mt-2 text-sm text-blue-600 hover:text-blue-800 hover:underline transition duration-200"}

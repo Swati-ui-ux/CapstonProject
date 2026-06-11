@@ -5,6 +5,7 @@ const { uploadOnCloudinary } = require("../utils/cloudinary")
 const crypto = require("crypto");
 const sendResetEmail = require("../utils/sendResetEmail");
 const sendOtpEmail = require("../utils/sendOtpEmail")
+const { Property } = require("../models")
 
 const signUpUser = async (req, res) => {
   try {
@@ -315,39 +316,27 @@ const resetPassword = async (req, res) => {
 const findAllOwners = async (req, res) => {
   try {
     const owners = await User.findAll({
-      where: {
-        role: "owner",
-      },
-      attributes: [
-        "id",
-        "name",
-        "email",
-        "image",
-      ],
-      include: [
-        {
-          model: Property,
-          attributes: [
-            "id",
-            "propertyName",
-            "location",
-            "description",
-            "image",
-          ],
-        },
-      ],
+      where: { role: "owner" },
+      attributes: ["id", "name", "email", "image","phone"],
+     include: [
+  {
+    model: Property,
+    required: false,
+    attributes: ["id", "propertyName", "location", "description", "image"],
+  },
+],
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Success",
       owners,
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("🔥 OWNER API ERROR:", error);
 
-    res.status(500).json({
-      message: "Server Error",
+    return res.status(500).json({
+      message: error.message,
     });
   }
 };
