@@ -326,16 +326,19 @@ const findAllOwners = async (req, res) => {
   },
 ],
     });
+    
+    console.log("owners",owners)
+    
     return res.status(200).json({
       message: "Success",
       owners,
     });
 
   } catch (error) {
-    console.log("🔥 OWNER API ERROR:", error);
+    console.log("🔥 OWNER API ERROR:", error.message);
 
     return res.status(500).json({
-      message: error.message,
+      message: `Owners api ${error.message}`,
     });
   }
 };
