@@ -5,7 +5,7 @@ const { uploadOnCloudinary } = require("../utils/cloudinary")
 const crypto = require("crypto");
 const sendResetEmail = require("../utils/sendResetEmail");
 const sendOtpEmail = require("../utils/sendOtpEmail")
-const { Property } = require("../models")
+const Property  = require("../models/property")
 
 const signUpUser = async (req, res) => {
   try {
