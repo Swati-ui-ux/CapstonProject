@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   // https://capstonproject-frontend-l82k.onrender.com/
-  baseURL: "https://capstonproject-frontend-l82k.onrender.com",
+  baseURL: "https://room-rent-app.onrender.com",
  withCredentials:true,
 });
 
