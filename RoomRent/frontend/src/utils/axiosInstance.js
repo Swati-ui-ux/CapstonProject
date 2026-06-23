@@ -1,8 +1,9 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://room-rent-app.onrender.com",
-
+  // https://capstonproject-frontend-l82k.onrender.com/
+  baseURL: "https://capstonproject-frontend-l82k.onrender.com",
+ withCredentials:true,
 });
 
 axiosInstance.interceptors.request.use(

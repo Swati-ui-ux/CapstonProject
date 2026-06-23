@@ -11,9 +11,7 @@ const OwnersList = () => {
 
   const getOwners = async () => {
     try {
-      console.log("data fetching")
       const response = await axiosInstance.get("/users/owners");
-      console.log("data fetched...",response.data)
       setOwners(response.data.owners);
     } catch (error) {
       console.log(error);
