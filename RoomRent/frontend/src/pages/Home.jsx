@@ -39,51 +39,171 @@ const dispatch = useDispatch()
     );
   }
 
-  return (
-    <>
-      {user?.role==='tenant'?<div className="min-h-screen bg-linear-to-r from-blue-50 to-purple-100 flex items-center justify-center p-6">
+return (
+  <>
+    {user?.role === "tenant" ? (
+      <div
+        className={`min-h-screen flex items-center justify-center p-6 transition-all duration-500 ${
+          darkMode
+            ? "bg-gradient-to-br from-slate-950 via-slate-900 to-gray-900"
+            : "bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100"
+        }`}
+      >
+        <div
+          className={`w-full max-w-lg rounded-3xl overflow-hidden ${
+            darkMode
+              ? "bg-white/10 backdrop-blur-xl border border-gray-700 shadow-2xl"
+              : "bg-white shadow-2xl"
+          }`}
+        >
+          {/* Header */}
 
-      <div className="bg-white shadow-2xl rounded-2xl w-full max-w-md p-8 text-center">
+          <div
+            className={`p-8 text-center ${
+              darkMode
+                ? "bg-gradient-to-r from-indigo-900 to-slate-900"
+                : "bg-gradient-to-r from-blue-500 to-indigo-600"
+            }`}
+          >
+            <div className="text-6xl mb-3">🏠</div>
 
-        <h1 className="text-3xl font-bold text-blue-600 mb-6">
-          Welcome to Room Rent App 🏠
-        </h1>
+            <h1 className="text-4xl font-bold text-white">
+              Welcome
+            </h1>
 
-        {user ? (
-          <div className="space-y-4 text-left">
+            <p className="text-gray-200 mt-2">
+              Room Rent Management System
+            </p>
+          </div>
 
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">Name</p>
-              <p className="text-lg font-bold text-blue-700">
+          {/* User */}
+
+          <div className="p-8">
+
+            <div className="flex flex-col items-center">
+
+              <img
+                src={
+                  user?.image ||
+                  "https://ui-avatars.com/api/?name=User"
+                }
+                alt="Profile"
+                className="w-32 h-32 rounded-full border-4 border-blue-500 object-cover shadow-xl"
+              />
+
+              <h2
+                className={`text-3xl font-bold mt-5 ${
+                  darkMode ? "text-white" : "text-gray-800"
+                }`}
+              >
                 {user.name}
-              </p>
-            </div>
+              </h2>
 
-            <div className="bg-green-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">Role</p>
-              <p className="text-lg font-bold text-green-700">
+              <span
+                className={`mt-3 px-5 py-2 rounded-full font-semibold ${
+                  user.role === "tenant"
+                    ? "bg-green-500/20 text-green-500"
+                    : "bg-blue-500/20 text-blue-500"
+                }`}
+              >
                 {user.role}
-              </p>
+              </span>
+
             </div>
 
-            <div className="bg-purple-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">Email</p>
-              <p className="text-lg font-bold text-purple-700 break-all">
-                {user.email}
-              </p>
+            {/* Details */}
+
+            <div className="mt-8 space-y-5">
+
+              <div
+                className={`rounded-2xl p-5 ${
+                  darkMode
+                    ? "bg-white/10 border border-gray-700"
+                    : "bg-blue-50"
+                }`}
+              >
+                <p
+                  className={`text-sm ${
+                    darkMode
+                      ? "text-gray-400"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Full Name
+                </p>
+
+                <h3
+                  className={`text-xl font-bold mt-1 ${
+                    darkMode
+                      ? "text-white"
+                      : "text-gray-800"
+                  }`}
+                >
+                  {user.name}
+                </h3>
+              </div>
+
+              <div
+                className={`rounded-2xl p-5 ${
+                  darkMode
+                    ? "bg-white/10 border border-gray-700"
+                    : "bg-purple-50"
+                }`}
+              >
+                <p
+                  className={`text-sm ${
+                    darkMode
+                      ? "text-gray-400"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Email Address
+                </p>
+
+                <h3
+                  className={`text-lg font-semibold break-all mt-1 ${
+                    darkMode
+                      ? "text-white"
+                      : "text-gray-800"
+                  }`}
+                >
+                  {user.email}
+                </h3>
+              </div>
+
+              <div
+                className={`rounded-2xl p-5 ${
+                  darkMode
+                    ? "bg-white/10 border border-gray-700"
+                    : "bg-green-50"
+                }`}
+              >
+                <p
+                  className={`text-sm ${
+                    darkMode
+                      ? "text-gray-400"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Account Type
+                </p>
+
+                <h3 className="text-xl font-bold text-green-500 mt-1">
+                  {user.role}
+                </h3>
+              </div>
+
             </div>
 
           </div>
-        ) : (
-          <p className="text-red-500 font-semibold">
-            User not found
-          </p>
-        )}
 
+        </div>
       </div>
-    </div>:<OwnerDashboard/>}
-    </>
-  );
+    ) : (
+      <OwnerDashboard />
+    )}
+  </>
+);
 };
 
 export default Home;

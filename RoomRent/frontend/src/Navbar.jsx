@@ -45,9 +45,9 @@ const Navbar = () => {
       <nav
         className={`${
           darkMode
-            ? "bg-slate-900"
+            ? "bg-slate-950"
             : "bg-blue-600"
-        } text-white shadow-lg`}
+        } text-white shadow-lg min-w-screen m-0` }
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold tracking-wide">
@@ -134,13 +134,14 @@ const Navbar = () => {
 
                     <Link
                       to="/dashboard"
-                      className="flex items-center gap-2 hover:text-gray-200 transition"
+                      className="flex items-center gap-2 transition"
                     >
                       Dashboard
-                    </Link>
+                      </Link>
+                    <button onClick={() => dispatch(toggleTheme()) } className="flex items-center gap-3 px-4 py-3 rounded-full transition text-left" > {darkMode ? ( <FaSun /> ) : ( <FaMoon /> )} </button>
                   </>
                 )}
-
+     
                 {user?.role === "tenant" && (
                   <Link
                     to="/my-room"
@@ -332,19 +333,7 @@ const Navbar = () => {
             </>
           )}
         </div>
-              <button
-                onClick={() =>
-                  dispatch(toggleTheme())
-                }
-                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-600 hover:text-white transition text-left"
-              >
-                {darkMode ? (
-                  <FaSun />
-                ) : (
-                  <FaMoon />
-                )}
-                Theme
-              </button>
+              <button onClick={() => dispatch(toggleTheme()) } className="flex items-center gap-3 px-4 py-3 rounded-full transition text-left" > {darkMode ? ( <FaSun /> ) : ( <FaMoon /> )} </button>
       </div>
     </>
   );

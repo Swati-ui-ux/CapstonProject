@@ -41,91 +41,155 @@ const MyProperties = () => {
     );
   }
  
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-
-      
-
-      {properties.length === 0&&user?.role==="owner" ? (
-        <div className="bg-white p-8 rounded-xl shadow">
-          <h1 className="text-3xl font-bold mb-6">
-        My Properties
+ return (
+  <div
+    className={`min-h-screen p-6 transition-all duration-500 ${
+      darkMode
+        ? "bg-gradient-to-br from-slate-950 via-gray-900 to-slate-800"
+        : "bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100"
+    }`}
+  >
+    {/* Heading */}
+    <div className="mb-10">
+      <h1
+        className={`text-4xl font-bold ${
+          darkMode ? "text-white" : "text-gray-800"
+        }`}
+      >
+        🏠 My Properties
       </h1>
-          <p className="text-gray-500">
-            No properties added yet.
-          </p>
-        </div>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-          {properties.map((property) => (
-            <div
-              key={property.id}
-              className="bg-white rounded-xl shadow-md p-5 hover:shadow-xl transition"
-            >
-              <h1 className="text-3xl font-bold mb-6">
-        My Properties
-      </h1>
-            <img
+      <p
+        className={`mt-2 ${
+          darkMode ? "text-gray-400" : "text-gray-500"
+        }`}
+      >
+        Manage all your listed properties.
+      </p>
+    </div>
+
+    {properties.length === 0 && user?.role === "owner" ? (
+      <div
+        className={`max-w-2xl mx-auto rounded-3xl p-12 text-center ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-lg border border-gray-700"
+            : "bg-white shadow-xl"
+        }`}
+      >
+        <div className="text-7xl mb-5">🏡</div>
+
+        <h2
+          className={`text-3xl font-bold ${
+            darkMode ? "text-white" : "text-gray-800"
+          }`}
+        >
+          No Properties Yet
+        </h2>
+
+        <p
+          className={`mt-3 ${
+            darkMode ? "text-gray-400" : "text-gray-500"
+          }`}
+        >
+          Start by adding your first property.
+        </p>
+      </div>
+    ) : (
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+
+        {properties.map((property) => (
+          <div
+            key={property.id}
+            className={`overflow-hidden rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] ${
+              darkMode
+                ? "bg-white/10 backdrop-blur-lg border border-gray-700 shadow-2xl"
+                : "bg-white shadow-xl"
+            }`}
+          >
+            {/* Image */}
+
+            <div className="relative overflow-hidden">
+              <img
                 src={property.image}
                 alt={property.propertyName}
-                className="w-full h-48 object-cover rounded-lg mb-4"
-            />
-              <h2 className="text-xl font-bold mb-2">
+                className="w-full h-60 object-cover transition duration-500 hover:scale-110"
+              />
+
+              <div className="absolute top-4 left-4 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                Property
+              </div>
+            </div>
+
+            {/* Content */}
+
+            <div className="p-6">
+
+              <h2
+                className={`text-2xl font-bold ${
+                  darkMode ? "text-white" : "text-gray-800"
+                }`}
+              >
                 {property.propertyName}
               </h2>
 
-              <p className="text-gray-600 mb-2">
+              <p
+                className={`mt-3 ${
+                  darkMode ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
                 📍 {property.location}
               </p>
 
-              <p className="text-gray-500">
+              <p
+                className={`mt-4 line-clamp-3 ${
+                  darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
                 {property.description}
               </p>
 
-              <div className="mt-4 text-sm text-gray-400">
-                Created:
-                {" "}
-                {new Date(
-                  property.createdAt
-                ).toLocaleDateString()}
-                  </div>
-                  <Link
-                to={`/property/${property.id}`}
-                className={`
-                  mt-4 
-                  inline-block 
-                  ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
-                  text-white 
-                  px-4 
-                  py-2 
-                  rounded-lg
-                `}
+              <div
+                className={`mt-5 text-sm ${
+                  darkMode ? "text-gray-500" : "text-gray-400"
+                }`}
+              >
+                📅 {new Date(property.createdAt).toLocaleDateString()}
+              </div>
+
+              {/* Buttons */}
+
+              <div className="flex gap-4 mt-6">
+
+                <Link
+                  to={`/property/${property.id}`}
+                  className={`flex-1 text-center py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    darkMode
+                      ? "bg-gradient-to-r from-indigo-700 to-blue-700 hover:scale-105 text-white"
+                      : "bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105 text-white"
+                  }`}
                 >
-                View Details
-              </Link>
-              <button
-          onClick={() =>
-            navigate(`/edit-property/${property.id}`)
-          }
-          className={`
-            ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-500 hover:bg-blue-600"} 
-            text-right 
-            mx-4 
-            text-white 
-            px-4 
-            py-2 
-            rounded
-          `}
-        >
-          Edit
-        </button>
+                  View Details
+                </Link>
+
+                <button
+                  onClick={() =>
+                    navigate(`/edit-property/${property.id}`)
+                  }
+                  className="flex-1 py-3 rounded-xl font-semibold bg-gradient-to-r from-emerald-500 to-green-600 hover:scale-105 transition-all duration-300 text-white"
+                >
+                  Edit
+                </button>
+
+              </div>
+
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+          </div>
+        ))}
+
+      </div>
+    )}
+  </div>
+);
 };
 
 export default MyProperties;

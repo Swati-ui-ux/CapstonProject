@@ -4,10 +4,12 @@ import React, {
   useState,
 } from "react";
 import axiosInstance from "../utils/axiosInstance"
+import { useSelector } from "react-redux"
 
 
 const OwnerDashboard = () => {
 
+const darkMode=useSelector(state=>state.theme.darkMode)
   const [stats, setStats] =
     useState(null);
 
@@ -45,74 +47,211 @@ const getStats = async () => {
 
 
 
-
-  return (
-  <div className="p-6 bg-gray-100 min-h-screen">
-      
-    
-    <h1 className="text-3xl font-bold mb-8 text-gray-800">
-      Owner Dashboard
+  return  (
+  <div
+    className={`min-h-screen w-full p-6 transition-all duration-500 ${
+      darkMode
+        ? "bg-gradient-to-br from-slate-900 via-gray-900 to-black"
+        : "bg-gradient-to-br from-sky-100 via-blue-50 to-indigo-100"
+    }`}
+  >
+    {/* Heading */}
+    <div className="mb-10">
+      <h1
+        className={`text-4xl font-extrabold tracking-wide ${
+          darkMode ? "text-white" : "text-gray-800"
+        }`}
+      >
+        🏠 Owner Dashboard
       </h1>
-      
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-        <h2 className="text-sm font-medium text-gray-500">
-          Total Properties
-          </h2>
-          
-        <p className="text-2xl font-bold text-blue-600 mt-2">
-          {stats.totalProperties}
-        </p>
+      <p
+        className={`mt-2 text-sm ${
+          darkMode ? "text-gray-400" : "text-gray-600"
+        }`}
+      >
+        Monitor your properties, rooms and rental collection.
+      </p>
+    </div>
+
+    {/* Cards */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+
+      {/* Total Properties */}
+      <div
+        className={`rounded-3xl p-7 transition duration-300 hover:scale-105 hover:-translate-y-2 border ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-lg border-gray-700 shadow-2xl"
+            : "bg-white border-gray-200 shadow-xl"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <div>
+            <p
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Total Properties
+            </p>
+
+            <h2 className="text-4xl font-bold text-cyan-500 mt-3">
+              {stats.totalProperties}
+            </h2>
+          </div>
+
+          <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-3xl">
+            🏢
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-        <h2 className="text-sm font-medium text-gray-500">
-          Total Rooms
-        </h2>
-        <p className="text-2xl font-bold text-green-600 mt-2">
-          {stats.totalRooms}
-        </p>
+      {/* Total Rooms */}
+      <div
+        className={`rounded-3xl p-7 transition duration-300 hover:scale-105 hover:-translate-y-2 border ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-lg border-gray-700 shadow-2xl"
+            : "bg-white border-gray-200 shadow-xl"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <div>
+            <p
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Total Rooms
+            </p>
+
+            <h2 className="text-4xl font-bold text-green-500 mt-3">
+              {stats.totalRooms}
+            </h2>
+          </div>
+
+          <div className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl">
+            🚪
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-        <h2 className="text-sm font-medium text-gray-500">
-          Occupied Rooms
-        </h2>
-        <p className="text-2xl font-bold text-purple-600 mt-2">
-          {stats.occupiedRooms}
-        </p>
+      {/* Occupied */}
+      <div
+        className={`rounded-3xl p-7 transition duration-300 hover:scale-105 hover:-translate-y-2 border ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-lg border-gray-700 shadow-2xl"
+            : "bg-white border-gray-200 shadow-xl"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <div>
+            <p
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Occupied Rooms
+            </p>
+
+            <h2 className="text-4xl font-bold text-violet-500 mt-3">
+              {stats.occupiedRooms}
+            </h2>
+          </div>
+
+          <div className="w-16 h-16 rounded-2xl bg-violet-500/20 flex items-center justify-center text-3xl">
+            👥
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-        <h2 className="text-sm font-medium text-gray-500">
-          Vacant Rooms
-        </h2>
-        <p className="text-2xl font-bold text-orange-500 mt-2">
-          {stats.vacantRooms}
-        </p>
+      {/* Vacant */}
+      <div
+        className={`rounded-3xl p-7 transition duration-300 hover:scale-105 hover:-translate-y-2 border ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-lg border-gray-700 shadow-2xl"
+            : "bg-white border-gray-200 shadow-xl"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <div>
+            <p
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Vacant Rooms
+            </p>
+
+            <h2 className="text-4xl font-bold text-orange-500 mt-3">
+              {stats.vacantRooms}
+            </h2>
+          </div>
+
+          <div className="w-16 h-16 rounded-2xl bg-orange-500/20 flex items-center justify-center text-3xl">
+            🛏️
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-        <h2 className="text-sm font-medium text-gray-500">
-          Total Rent Collected
-        </h2>
-        <p className="text-2xl font-bold text-emerald-600 mt-2">
-          ₹{stats.totalRentCollected}
-        </p>
+      {/* Rent Collected */}
+      <div
+        className={`rounded-3xl p-7 transition duration-300 hover:scale-105 hover:-translate-y-2 border ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-lg border-gray-700 shadow-2xl"
+            : "bg-white border-gray-200 shadow-xl"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <div>
+            <p
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Total Rent Collected
+            </p>
+
+            <h2 className="text-4xl font-bold text-emerald-500 mt-3">
+              ₹{stats.totalRentCollected}
+            </h2>
+          </div>
+
+          <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-3xl">
+            💰
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-        <h2 className="text-sm font-medium text-gray-500">
-          Pending Rent
-        </h2>
-        <p className="text-2xl font-bold text-red-500 mt-2">
-          ₹{stats.pendingRent}
-        </p>
+      {/* Pending Rent */}
+      <div
+        className={`rounded-3xl p-7 transition duration-300 hover:scale-105 hover:-translate-y-2 border ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-lg border-gray-700 shadow-2xl"
+            : "bg-white border-gray-200 shadow-xl"
+        }`}
+      >
+        <div className="flex justify-between items-center">
+          <div>
+            <p
+              className={`text-sm font-medium ${
+                darkMode ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Pending Rent
+            </p>
+
+            <h2 className="text-4xl font-bold text-red-500 mt-3">
+              ₹{stats.pendingRent}
+            </h2>
+          </div>
+
+          <div className="w-16 h-16 rounded-2xl bg-red-500/20 flex items-center justify-center text-3xl">
+            📄
+          </div>
+        </div>
       </div>
 
     </div>
-
   </div>
 );
 };

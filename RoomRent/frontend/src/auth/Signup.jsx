@@ -74,21 +74,48 @@ console.log('data',res)
 };
   return (
     <>
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-300">
+   <div
+  className={`min-h-screen flex items-center justify-center px-4 py-10 transition-all duration-500
+  ${
+    darkMode
+      ? "bg-linear-to-br from-slate-950 via-slate-900 to-slate-800"
+      : "bg-linear-to-br from-blue-100 via-white to-indigo-100"
+  }`}
+>
   <form
     onSubmit={handleSignup}
-    className="bg-white p-6 w-96 rounded-2xl shadow-xl border border-gray-100"
+    className={`w-full max-w-md rounded-3xl border backdrop-blur-xl p-8 shadow-2xl transition-all duration-500
+${
+darkMode
+? "bg-slate-900/80 border-slate-700 shadow-black/40"
+: "bg-white/90 border-white shadow-blue-200"
+}`}
   >
-    <h2 className={darkMode ? "text-2xl font-bold text-center text-black mb-1" : "text-2xl font-bold text-center text-blue-600 mb-1"}>
-      Create Account
-    </h2>
+    <h2
+className={`text-4xl font-extrabold text-center mb-2
+${darkMode?"text-white":"text-slate-800"}
+`}
+>
+Create Account
+</h2>
 
-    <p className={darkMode ? "text-center text-gray-500 text-sm mb-5" : "text-center text-gray-500 text-sm mb-5"}>
-      Join Room Rent App
-    </p>
+<p
+className={`text-center mb-8
+${darkMode?"text-slate-400":"text-gray-500"}
+`}
+>
+Join RoomRent and start managing properties.
+</p>
 
     <input
-      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"} 
+      className={`w-full m-2 px-4 py-3 rounded-xl border transition-all duration-300
+focus:outline-none focus:ring-2
+${
+darkMode
+? "bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 focus:ring-blue-500"
+: "bg-gray-50 border-gray-200 text-gray-800 placeholder:text-gray-400 focus:ring-blue-500"
+}
+`} 
       placeholder="Full Name"
       name="name"
       value={formData.name}
@@ -97,7 +124,14 @@ console.log('data',res)
     />
 
     <input
-      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
+     className={`w-full m-2 px-4 py-3 rounded-xl border transition-all duration-300
+focus:outline-none focus:ring-2
+${
+darkMode
+? "bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 focus:ring-blue-500"
+: "bg-gray-50 border-gray-200 text-gray-800 placeholder:text-gray-400 focus:ring-blue-500"
+}
+`}
       placeholder="Phone Number"
       name="phone"
       value={formData.phone}
@@ -105,7 +139,14 @@ console.log('data',res)
     />
 
     <input
-      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
+      className={`w-full m-2 px-4 py-3 rounded-xl border transition-all duration-300
+focus:outline-none focus:ring-2
+${
+darkMode
+? "bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 focus:ring-blue-500"
+: "bg-gray-50 border-gray-200 text-gray-800 placeholder:text-gray-400 focus:ring-blue-500"
+}
+`}
       placeholder="Email Address"
       type="email"
       name="email"
@@ -115,7 +156,14 @@ console.log('data',res)
     />
 
     <input
-      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white placeholder:text-gray-300" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
+      className={`w-full m-2 px-4 py-3 rounded-xl border transition-all duration-300
+focus:outline-none focus:ring-2
+${
+darkMode
+? "bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 focus:ring-blue-500"
+: "bg-gray-50 border-gray-200 text-gray-800 placeholder:text-gray-400 focus:ring-blue-500"
+}
+`}
       placeholder="Password"
       type="password"
       name="password"
@@ -124,12 +172,27 @@ console.log('data',res)
       required
     />
 
-    <label className="text-sm font-medium text-gray-600">
+    <label className={`block mb-2 font-semibold ${
+darkMode?"text-slate-300":"text-gray-700"
+}`}>
       Profile Image
     </label>
 
     <input
-      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-3 rounded-lg mt-1 bg-gray-700 text-white" : "w-full border border-gray-300 p-2.5 mb-3 rounded-lg mt-1"}
+      className={`w-full rounded-xl border px-4 py-3 mt-4 ml-2 cursor-pointer
+file:mr-4
+file:px-4
+file:py-2
+file:border-0
+file:rounded-lg
+file:font-semibold
+transition-all
+${
+darkMode
+? "bg-slate-800 border-slate-700 text-white file:bg-blue-600 file:text-white"
+: "bg-gray-50 border-gray-200 file:bg-blue-600 file:text-white"
+}
+`}
       type="file"
       name="image"
       onChange={handleChange}
@@ -137,7 +200,14 @@ console.log('data',res)
     />
 
     <select
-      className={darkMode ? "w-full border border-gray-300 p-2.5 mb-4 rounded-lg outline-none focus:ring-2 focus:ring-blue-400 bg-gray-700 text-white" : "w-full border border-gray-300 p-2.5 mb-4 rounded-lg outline-none focus:ring-2 focus:ring-blue-400"}
+      className={`w-full m-2 px-4 py-3 rounded-xl border transition-all
+focus:outline-none focus:ring-2
+${
+darkMode
+? "bg-slate-800 border-slate-700 text-white focus:ring-blue-500"
+: "bg-gray-50 border-gray-200 text-gray-800 focus:ring-blue-500"
+}
+`}
       name="role"
       value={formData.role}
       onChange={handleChange}
@@ -148,7 +218,16 @@ console.log('data',res)
 
     <button
       type="submit"
-      className={darkMode ? "w-full bg-black hover:bg-gray-900 cursor-alias text-white py-2.5 rounded-lg font-semibold transition" : "w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold transition"}
+      className={`w-full mt-3 py-3 rounded-xl font-bold text-lg transition-all duration-300
+hover:scale-[1.02]
+active:scale-95
+shadow-lg
+${
+darkMode
+? "bg-linear-to-r ml-2 from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white"
+: "bg-linear-to-r from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white"
+}
+`}
     >
       {isLoading ? (
         <Loader text="Creating..." />
@@ -157,15 +236,24 @@ console.log('data',res)
       )}
     </button>
 
-    <p className={darkMode ? "text-sm text-center mt-4 text-gray-400" : "text-sm text-center mt-4 text-gray-600"}>
-      Already have an account?{" "}
-      <Link
-        to="/login"
-       className={darkMode ? "text-blue-400 font-bold hover:text-blue-300" : "text-blue-600 font-bold hover:text-blue-800"}
-      >
-        Login
-      </Link>
-    </p>
+    <p
+className={`text-center mt-6
+${darkMode?"text-slate-400":"text-gray-600"}
+`}
+>
+Already have an account?{" "}
+<Link
+to="/login"
+className={`font-bold transition-colors
+${
+darkMode
+?"text-blue-400 hover:text-blue-300"
+:"text-blue-600 hover:text-blue-700"
+}`}
+>
+Login
+</Link>
+</p>
   </form>
 </div>
      

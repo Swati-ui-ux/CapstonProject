@@ -36,7 +36,7 @@ const AuthRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path='/owners' element={<OwnersList />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/reset-password/token" element={<ResetPassword />} />
         <Route path="/verify-otp" element={<VerifyOtp />}
 />
         {/* Protected */}

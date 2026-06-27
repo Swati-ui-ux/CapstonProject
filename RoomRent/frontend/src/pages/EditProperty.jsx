@@ -126,116 +126,163 @@ const darkMode = useSelector(
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
+ return (
+  <div
+    className={`min-h-screen flex justify-center items-center p-6 transition-all duration-500 ${
+      darkMode
+        ? "bg-gradient-to-br from-slate-950 via-gray-900 to-slate-800"
+        : "bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100"
+    }`}
+  >
+    <div
+      className={`w-full max-w-2xl rounded-3xl overflow-hidden ${
+        darkMode
+          ? "bg-white/10 backdrop-blur-xl border border-gray-700 shadow-2xl"
+          : "bg-white shadow-2xl"
+      }`}
+    >
+      {/* Header */}
 
-        <h1 className={`
-          text-3xl 
-          font-bold 
-          text-center 
-          mb-6 
-          ${darkMode ? "text-slate-900" : "text-blue-600"}
-        `}>
-          Edit Property
+      <div
+        className={`p-8 ${
+          darkMode
+            ? "bg-gradient-to-r from-indigo-900 to-slate-900"
+            : "bg-gradient-to-r from-blue-500 to-indigo-600"
+        }`}
+      >
+        <h1 className="text-4xl font-bold text-white">
+          🏠 Edit Property
         </h1>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5"
-        >
-          <div>
-            <label className="block mb-2 font-medium">
-              Property Name
-            </label>
-
-            <input
-              type="text"
-              name="propertyName"
-              value={
-                formData.propertyName
-              }
-              onChange={
-                handleChange
-              }
-              className="w-full border border-gray-300 rounded-lg p-3"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2 font-medium">
-              Location
-            </label>
-
-            <input
-              type="text"
-              name="location"
-              value={
-                formData.location
-              }
-              onChange={
-                handleChange
-              }
-              className="w-full border border-gray-300 rounded-lg p-3"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2 font-medium">
-              Description
-            </label>
-
-            <textarea
-              rows="4"
-              name="description"
-              value={
-                formData.description
-              }
-              onChange={
-                handleChange
-              }
-              className="w-full border border-gray-300 rounded-lg p-3"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2 font-medium">
-              Change Image
-            </label>
-
-            <input
-              type="file"
-              onChange={(e) =>
-                setImage(
-                  e.target.files[0]
-                )
-              }
-              className="w-full border border-gray-300 rounded-lg p-3"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`
-              w-full 
-              ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
-              text-white 
-              py-3 
-              rounded-lg 
-              transition
-            `}
-          >
-            {loading
-              ? "Updating..."
-              : "Update Property"}
-          </button>
-        </form>
+        <p className="text-gray-200 mt-2">
+          Update your property details below.
+        </p>
       </div>
+
+      {/* Form */}
+
+      <form
+        onSubmit={handleSubmit}
+        className="p-8 space-y-6"
+      >
+        <div>
+          <label
+            className={`block mb-2 font-semibold ${
+              darkMode ? "text-white" : "text-gray-700"
+            }`}
+          >
+            Property Name
+          </label>
+
+          <input
+            type="text"
+            name="propertyName"
+            value={formData.propertyName}
+            onChange={handleChange}
+            required
+            className={`w-full p-4 rounded-xl outline-none transition ${
+              darkMode
+                ? "bg-gray-800 border border-gray-600 text-white focus:border-blue-500"
+                : "border border-gray-300 focus:border-blue-500"
+            }`}
+          />
+        </div>
+
+        <div>
+          <label
+            className={`block mb-2 font-semibold ${
+              darkMode ? "text-white" : "text-gray-700"
+            }`}
+          >
+            Location
+          </label>
+
+          <input
+            type="text"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+            className={`w-full p-4 rounded-xl outline-none transition ${
+              darkMode
+                ? "bg-gray-800 border border-gray-600 text-white focus:border-blue-500"
+                : "border border-gray-300 focus:border-blue-500"
+            }`}
+          />
+        </div>
+
+        <div>
+          <label
+            className={`block mb-2 font-semibold ${
+              darkMode ? "text-white" : "text-gray-700"
+            }`}
+          >
+            Description
+          </label>
+
+          <textarea
+            rows="5"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className={`w-full p-4 rounded-xl outline-none resize-none transition ${
+              darkMode
+                ? "bg-gray-800 border border-gray-600 text-white focus:border-blue-500"
+                : "border border-gray-300 focus:border-blue-500"
+            }`}
+          />
+        </div>
+
+        <div>
+          <label
+            className={`block mb-2 font-semibold ${
+              darkMode ? "text-white" : "text-gray-700"
+            }`}
+          >
+            Change Property Image
+          </label>
+
+          <input
+            type="file"
+            onChange={(e) =>
+              setImage(e.target.files[0])
+            }
+            className={`w-full p-4 rounded-xl ${
+              darkMode
+                ? "bg-gray-800 border border-gray-600 text-white"
+                : "border border-gray-300"
+            }`}
+          />
+
+          {image && (
+            <div className="mt-5">
+              <img
+                src={URL.createObjectURL(image)}
+                alt="preview"
+                className="w-full h-56 object-cover rounded-2xl border-4 border-blue-500 shadow-lg"
+              />
+            </div>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-4 rounded-xl text-lg font-bold transition-all duration-300 ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : darkMode
+              ? "bg-gradient-to-r from-indigo-700 to-blue-700 hover:scale-[1.02] text-white"
+              : "bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-[1.02] text-white"
+          }`}
+        >
+          {loading ? "Updating..." : "Update Property"}
+        </button>
+
+      </form>
     </div>
-  );
+  </div>
+);
 };
 
 export default EditProperty;

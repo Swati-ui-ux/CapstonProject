@@ -1,8 +1,21 @@
 const Loader = ({ text = "Loading..." }) => {
   return (
-    <div className="flex items-center justify-center gap-2">
-      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-      <span>{text}</span>
+    <div className="flex items-center justify-center gap-3">
+      <div className="flex gap-1">
+        <span className="w-2 h-2 bg-white rounded-full animate-bounce"></span>
+        <span
+          className="w-2 h-2 bg-white rounded-full animate-bounce"
+          style={{ animationDelay: "0.15s" }}
+        ></span>
+        <span
+          className="w-2 h-2 bg-white rounded-full animate-bounce"
+          style={{ animationDelay: "0.3s" }}
+        ></span>
+      </div>
+
+      <span className="text-sm font-medium">
+        {text}
+      </span>
     </div>
   );
 };

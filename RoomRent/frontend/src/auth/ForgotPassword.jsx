@@ -20,10 +20,12 @@ const ForgotPassword = () => {
       const res = await axiosInstance.post(
   "/users/forgot-password",
   { email }
-);
+      );
+      console.log(res)
 toast.success(res.data.message)
 setMessage(res.data.message);
     } catch (error) {
+      console.log(error)
       setMessage(error.response?.data?.message || "Something went wrong")
     } finally {
       setIsSending(false)
@@ -31,34 +33,71 @@ setMessage(res.data.message);
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div
+  className={`min-h-screen flex justify-center items-center px-4 transition-all duration-500 ${
+    darkMode
+      ? "bg-linear-to-br from-slate-950 via-slate-900 to-slate-800"
+      : "bg-linear-to-br from-blue-100 via-white to-indigo-200"
+  }`}
+>
       
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-2xl shadow-lg w-80"
+        className={`w-full max-w-md p-8 rounded-3xl backdrop-blur-xl border shadow-2xl transition-all duration-500 ${
+        darkMode
+          ? "bg-slate-900/80 border-slate-700 text-white"
+          : "bg-white/80 border-white/40 text-gray-800"
+      }`}
       >
-        <h2 className={darkMode ? "text-2xl font-bold text-center mb-6 text-black" : "text-2xl font-bold text-center mb-6 text-blue-600"} >
+        <h2 className={`text-3xl font-extrabold text-center mb-2 ${
+          darkMode
+            ? "text-white"
+            : "text-blue-700"
+        }`}>
           Forgot Password
         </h2>
-
+        <p
+          className={`text-center mb-6 ${
+            darkMode
+              ? "text-slate-300"
+              : "text-gray-500"
+          }`}
+        >
+          Enter your registered email to receive a password reset link.
+        </p>
         <input
           type="email"
           required
           placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className={`w-full rounded-xl px-4 py-3 border outline-none transition-all duration-300 focus:ring-2 focus:ring-blue-500 ${
+          darkMode
+            ? "bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+            : "bg-white border-gray-300 text-gray-800 placeholder:text-gray-400"
+        }`}
         />
 
         <button
           type="submit"
-          className={darkMode ? "w-full bg-black hover:bg-gray-900 text-white p-3 rounded-lg font-semibold transition" : "w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200"}
+          className={`w-full mt-4 py-3 rounded-xl font-bold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 ${
+          darkMode
+            ? "bg-linear-to-r from-slate-600 to-slate-800 hover:from-slate-600 hover:to-slate-800"
+            : "bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+        }`}
         >
          {isSending?<Loader size={20} text="Sending..."color="#fff"/>:"Send Reset Link"}
         </button>
 
         {message && (
-          <p className="text-center text-sm mt-4 text-green-600">
+         <p
+          className={`text-center mt-5 text-sm font-medium ${
+            message.toLowerCase().includes("wrong") ||
+            message.toLowerCase().includes("invalid")
+              ? "text-red-500"
+              : "text-green-500"
+          }`}
+        >
             {message}
           </p>
         )}

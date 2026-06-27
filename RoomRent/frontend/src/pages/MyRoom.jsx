@@ -9,7 +9,9 @@ const MyRoom = () => {
   const [loading, setLoading] = useState(true);
   const [payments, setPayments] = useState([]);
   const token = localStorage.getItem("token");
-
+const darkMode = useSelector(
+  (state) => state.theme.darkMode
+);
   const user = useSelector(state => state.user.user)
   console.log("user",user)
 const getPayments = async () => {
@@ -137,134 +139,277 @@ const handlePayment = async (payment) => {
       </div>
     );
   }
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
+ return (
+  <div
+    className={`min-h-screen p-6 transition-all duration-500 ${
+      darkMode
+        ? "bg-gradient-to-br from-slate-950 via-gray-900 to-slate-800"
+        : "bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100"
+    }`}
+  >
+    {/* Heading */}
 
-      {rooms.map((room) => (
-        <div key={room.id} className="max-w-5xl mx-auto mb-10">
+    <div className="text-center mb-10">
+      <h1
+        className={`text-5xl font-bold ${
+          darkMode ? "text-white" : "text-gray-800"
+        }`}
+      >
+        🏠 My Room
+      </h1>
 
-          <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">
-            My Rooms
-          </h1>
+      <p
+        className={`mt-2 ${
+          darkMode ? "text-gray-400" : "text-gray-500"
+        }`}
+      >
+        View your room details and rent payments.
+      </p>
+    </div>
 
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+    {/* Room Details */}
 
-            {/* Image */}
-            {room.Property?.image && (
-              <img
-                src={room.Property.image}
-                alt="Property"
-                className="w-full h-72 object-cover"
-              />
-            )}
+    {rooms.map((room) => (
+      <div
+        key={room.id}
+        className={`max-w-6xl mx-auto rounded-3xl overflow-hidden mb-12 ${
+          darkMode
+            ? "bg-white/10 backdrop-blur-xl border border-gray-700 shadow-2xl"
+            : "bg-white shadow-2xl"
+        }`}
+      >
+        {/* Image */}
 
-            <div className="p-8">
+        {room.Property?.image && (
+          <div className="relative">
+            <img
+              src={room.Property.image}
+              alt="Property"
+              className="w-full h-96 object-cover"
+            />
 
-              {/* GRID */}
-              <div className="grid md:grid-cols-2 gap-6">
+            <div className="absolute inset-0 bg-black/40"></div>
 
-                <div className="bg-blue-50 p-5 rounded-xl">
-                  <h3 className="text-gray-600">Property</h3>
-                  <p className="text-xl font-bold text-blue-600">
-                    {room.Property?.propertyName}
-                  </p>
-                </div>
+            <div className="absolute bottom-8 left-8">
+              <h2 className="text-4xl font-bold text-white">
+                {room.Property?.propertyName}
+              </h2>
 
-                <div className="bg-green-50 p-5 rounded-xl">
-                  <h3 className="text-gray-600">Room Number</h3>
-                  <p className="text-xl font-bold text-green-600">
-                    {room.roomNumber}
-                  </p>
-                </div>
+              <p className="text-gray-200 mt-2">
+                📍 {room.Property?.location}
+              </p>
+            </div>
+          </div>
+        )}
 
-                <div className="bg-purple-50 p-5 rounded-xl">
-                  <h3 className="text-gray-600">Floor</h3>
-                  <p className="text-xl font-bold text-purple-600">
-                    {room.floorNumber}
-                  </p>
-                </div>
+        {/* Content */}
 
-                <div className="bg-yellow-50 p-5 rounded-xl">
-                  <h3 className="text-gray-600">Monthly Rent</h3>
-                  <p className="text-xl font-bold text-yellow-600">
-                    ₹{room.rent}
-                  </p>
-                </div>
+        <div className="p-8">
 
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            {[
+              {
+                title: "Room Number",
+                value: room.roomNumber,
+                color: "text-blue-500",
+              },
+              {
+                title: "Floor",
+                value: room.floorNumber,
+                color: "text-green-500",
+              },
+              {
+                title: "Monthly Rent",
+                value: `₹${room.rent}`,
+                color: "text-yellow-500",
+              },
+              {
+                title: "Status",
+                value: room.status,
+                color:
+                  room.status === "available"
+                    ? "text-green-500"
+                    : "text-red-500",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className={`rounded-2xl p-5 transition hover:scale-105 ${
+                  darkMode
+                    ? "bg-white/10 border border-gray-700"
+                    : "bg-gray-50 shadow"
+                }`}
+              >
+                <p
+                  className={`text-sm ${
+                    darkMode
+                      ? "text-gray-400"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {item.title}
+                </p>
+
+                <h3
+                  className={`text-2xl font-bold mt-2 ${item.color}`}
+                >
+                  {item.value}
+                </h3>
+              </div>
+            ))}
+
+          </div>
+
+          <div
+            className={`mt-8 rounded-2xl p-6 ${
+              darkMode
+                ? "bg-white/10 border border-gray-700"
+                : "bg-blue-50"
+            }`}
+          >
+            <h3
+              className={`text-2xl font-bold mb-4 ${
+                darkMode ? "text-white" : "text-gray-800"
+              }`}
+            >
+              About Property
+            </h3>
+
+            <p
+              className={`leading-8 ${
+                darkMode
+                  ? "text-gray-300"
+                  : "text-gray-600"
+              }`}
+            >
+              {room.Property?.description}
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    ))}
+
+    {/* Payment Section */}
+
+    <div className="max-w-6xl mx-auto">
+
+      <h2
+        className={`text-4xl font-bold mb-8 ${
+          darkMode ? "text-white" : "text-gray-800"
+        }`}
+      >
+        💳 Payment History
+      </h2>
+
+      {payments.length === 0 && user?.role === "tenant" ? (
+        <div
+          className={`rounded-3xl p-12 text-center ${
+            darkMode
+              ? "bg-white/10 border border-gray-700"
+              : "bg-white shadow-xl"
+          }`}
+        >
+          <div className="text-6xl">💳</div>
+
+          <h3
+            className={`text-3xl font-bold mt-5 ${
+              darkMode ? "text-white" : "text-gray-800"
+            }`}
+          >
+            No Payment Records
+          </h3>
+
+          <p
+            className={`mt-3 ${
+              darkMode
+                ? "text-gray-400"
+                : "text-gray-500"
+            }`}
+          >
+            No rent payments have been generated yet.
+          </p>
+        </div>
+      ) : (
+        payments.map((payment) => (
+          <div
+            key={payment.id}
+            className={`rounded-3xl p-6 mb-6 transition hover:-translate-y-1 ${
+              darkMode
+                ? "bg-white/10 border border-gray-700"
+                : "bg-white shadow-xl"
+            }`}
+          >
+            <div className="flex justify-between flex-wrap gap-4">
+
+              <div>
+                <h3
+                  className={`text-2xl font-bold ${
+                    darkMode
+                      ? "text-white"
+                      : "text-gray-800"
+                  }`}
+                >
+                  🏠 {payment.Room?.Property?.propertyName}
+                </h3>
+
+                <p
+                  className={`mt-2 ${
+                    darkMode
+                      ? "text-gray-300"
+                      : "text-gray-600"
+                  }`}
+                >
+                  🚪 Room {payment.Room?.roomNumber}
+                </p>
+
+                <p
+                  className={`mt-2 ${
+                    darkMode
+                      ? "text-gray-300"
+                      : "text-gray-600"
+                  }`}
+                >
+                  📅 {payment.month}
+                </p>
               </div>
 
-              {/* DETAILS */}
-              <div className="mt-6 bg-gray-50 p-5 rounded-xl">
-                <p className="text-gray-700">
-                  📍 {room.Property?.location}
-                </p>
-                <p className="text-gray-600 mt-2">
-                  {room.Property?.description}
-                </p>
-              </div>
+              <div className="text-right">
+                <h2 className="text-3xl font-bold text-green-500">
+                  ₹{payment.amount}
+                </h2>
 
-              {/* STATUS */}
-              <div className="mt-5">
-                <span className="bg-green-100 text-green-700 px-4 py-2 rounded-full font-semibold">
-                  {room.status}
+                <span
+                  className={`inline-block mt-3 px-4 py-2 rounded-full font-semibold ${
+                    payment.status === "paid"
+                      ? "bg-green-500/20 text-green-500"
+                      : "bg-red-500/20 text-red-500"
+                  }`}
+                >
+                  {payment.status}
                 </span>
               </div>
 
             </div>
-          </div>
-        </div>
-      ))}
 
-      <div className="max-w-5xl mx-auto mt-10">
-
-       
-
-        {payments.length === 0 && user?.role==='tenant' ? (
-          <div className="bg-white p-6 rounded-xl shadow">
-             <h2 className="text-2xl font-bold mb-4 text-gray-700">
-          Payment History
-        </h2>
-            No payments paid
-          </div>
-        ) : (
-          payments.map((payment) => (
-            <div
-              key={payment.id}
-              className="bg-white shadow rounded-xl p-5 mb-4"
-            >
-               <h2 className="text-2xl font-bold mb-4 text-gray-700">
-          Payment History
-        </h2>
-              <h3 className="text-lg font-bold mb-2">
-                Rent Information
-              </h3>
-                <p>🏠 Property: {payment.Room?.Property?.propertyName}</p>
-                <p>🚪 Room No: {payment.Room?.roomNumber}</p>
-              <p>💰 Monthly Rent: ₹{payment.amount}</p>
-              <p>📅 Month: {payment.month}</p>
- 
-              <p
-                className={
-                  payment.status === "paid"
-                    ? "text-green-600 font-bold"
-                    : "text-red-600 font-bold"
-                }
-              >
-                Status: {payment.status}
-                  </p>
-                  <button
+            {payment.status !== "paid" && (
+              <button
                 onClick={() => handlePayment(payment)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-                >
+                className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:scale-[1.02] transition"
+              >
                 Pay Rent
-                </button>
-            </div>
-          ))
-        )}
-      
-      </div>
+              </button>
+            )}
+
+          </div>
+        ))
+      )}
+
     </div>
-  );
+  </div>
+);
 };
 
 export default MyRoom;

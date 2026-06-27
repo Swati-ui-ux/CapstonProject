@@ -126,169 +126,225 @@ const Profile = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
-      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg overflow-hidden">
+return (
+  <div
+    className={`min-h-screen flex justify-center items-center p-6 transition-all duration-500 ${
+      darkMode
+        ? "bg-gradient-to-br from-slate-950 via-gray-900 to-slate-800"
+        : "bg-gradient-to-br from-blue-50 via-indigo-50 to-sky-100"
+    }`}
+  >
+    <div
+      className={`w-full max-w-5xl rounded-[30px] overflow-hidden transition-all duration-500 ${
+        darkMode
+          ? "bg-white/10 backdrop-blur-xl border border-gray-700 shadow-2xl"
+          : "bg-white shadow-2xl"
+      }`}
+    >
+      {/* Cover */}
+      <div
+        className={`h-56 ${
+          darkMode
+            ? "bg-gradient-to-r from-slate-800 via-indigo-900 to-black"
+            : "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"
+        }`}
+      ></div>
 
-        {/* Header */}
-        <div className={`h-40 ${darkMode ? "bg-linear-to-r from-slate-600 to-slate-900" : "bg-linear-to-r from-blue-400 to-blue-500"}`}></div>
+      <div className="relative px-8 pb-10">
 
-        <div className="relative px-6 pb-6">
+        {/* Profile */}
+        <div className="flex flex-col items-center">
 
-          {/* Profile Info */}
-          <div className="flex flex-col items-center">
+          <img
+            src={user.image}
+            alt={user.name}
+            className="w-44 h-44 rounded-full border-[6px] border-white object-cover shadow-2xl -mt-24"
+          />
 
-            <img
-              src={user.image}
-              alt={user.name}
-              className="w-40 h-40 rounded-full border-4 border-white object-cover -mt-16 shadow-md"
-            />
+          <h1
+            className={`text-4xl font-bold mt-5 ${
+              darkMode ? "text-white" : "text-gray-800"
+            }`}
+          >
+            {user.name}
+          </h1>
 
-            <h2 className="text-2xl font-bold mt-4">
-              {user.name}
-            </h2>
+          <p
+            className={`capitalize mt-2 ${
+              darkMode ? "text-gray-300" : "text-gray-500"
+            }`}
+          >
+            {user.role}
+          </p>
 
-            <p className="text-gray-500 capitalize">
-              {user.role}
-            </p>
+          <span
+            className={`mt-4 px-5 py-2 rounded-full font-semibold ${
+              user.isActive
+                ? "bg-green-500/20 text-green-400"
+                : "bg-red-500/20 text-red-400"
+            }`}
+          >
+            {user.isActive ? "🟢 Active" : "🔴 Inactive"}
+          </span>
+        </div>
 
-            <span
-              className={`mt-2 px-3 py-1 rounded-full text-sm font-medium ${
-                user.isActive
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
+        {/* Details */}
+
+        <div className="grid md:grid-cols-2 gap-6 mt-10">
+
+          {[
+            {
+              title: "Full Name",
+              value: user.name,
+            },
+            {
+              title: "Email",
+              value: user.email,
+            },
+            {
+              title: "Phone Number",
+              value: user.phone,
+            },
+            {
+              title: "Role",
+              value: user.role,
+            },
+            {
+              title: "Created",
+              value: new Date(user.createdAt).toLocaleDateString(),
+            },
+            {
+              title: "Last Updated",
+              value: new Date(user.updatedAt).toLocaleDateString(),
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className={`rounded-2xl p-5 transition-all duration-300 hover:scale-[1.03] ${
+                darkMode
+                  ? "bg-white/10 border border-gray-700"
+                  : "bg-gray-50 shadow-md"
               }`}
             >
-              {user.isActive ? "Active" : "Inactive"}
-            </span>
-          </div>
-
-          {/* Details */}
-          <div className="grid md:grid-cols-2 gap-4 mt-8">
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">Full Name</p>
-              <p className="font-semibold">{user.name}</p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">Email</p>
-              <p className="font-semibold break-all">
-                {user.email}
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">Phone Number</p>
-              <p className="font-semibold">{user.phone}</p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">Role</p>
-              <p className="font-semibold capitalize">
-                {user.role}
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">
-                Account Created
-              </p>
-              <p className="font-semibold">
-                {new Date(user.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-gray-500 text-sm">
-                Last Updated
-              </p>
-              <p className="font-semibold">
-                {new Date(user.updatedAt).toLocaleDateString()}
-              </p>
-            </div>
-
-          </div>
-
-          {/* Edit Form */}
-          {isEditing && (
-            <div className="mt-8 bg-gray-50 p-6 rounded-xl">
-
-              <h2 className="text-xl font-bold mb-4">
-                Edit Profile
-              </h2>
-
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Name"
-                className="w-full border p-3 rounded-lg mb-3"
-              />
-
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Phone"
-                className="w-full border p-3 rounded-lg mb-3"
-              />
-
-              <input
-                type="file"
-                onChange={handleFileChange}
-                className="w-full border p-3 rounded-lg mb-3"
-              />
-
-              {file && (
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt="preview"
-                  className="w-32 h-32 rounded-full object-cover mb-4"
-                />
-              )}
-
-              <button
-                onClick={handleUpdateProfile}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
+              <p
+                className={`text-sm ${
+                  darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
               >
-                Save Changes
-              </button>
+                {item.title}
+              </p>
 
+              <h2
+                className={`font-semibold text-lg break-all mt-2 ${
+                  darkMode ? "text-white" : "text-gray-800"
+                }`}
+              >
+                {item.value}
+              </h2>
             </div>
-          )}
-
-          {/* Buttons */}
-          <div className="flex justify-center gap-4 mt-8">
-
-            <button
-              onClick={() => setIsEditing(!isEditing)}
-              className={`
-                ${darkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-blue-600 hover:bg-blue-700"} 
-                text-white 
-                px-6 
-                py-2 
-                rounded-lg
-              `}
-            >
-              {isEditing ? "Cancel" : "Edit Profile"}
-            </button>
-
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg"
-            >
-              Logout
-            </button>
-
-          </div>
+          ))}
 
         </div>
+
+        {/* Edit Form */}
+
+        {isEditing && (
+          <div
+            className={`mt-10 rounded-3xl p-8 ${
+              darkMode
+                ? "bg-white/10 border border-gray-700"
+                : "bg-gray-50 shadow-lg"
+            }`}
+          >
+            <h2
+              className={`text-3xl font-bold mb-6 ${
+                darkMode ? "text-white" : "text-gray-800"
+              }`}
+            >
+              Edit Profile
+            </h2>
+
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter Name"
+              value={formData.name}
+              onChange={handleChange}
+              className={`w-full p-4 rounded-xl mb-5 outline-none transition ${
+                darkMode
+                  ? "bg-gray-800 border border-gray-600 text-white focus:border-blue-500"
+                  : "border border-gray-300 focus:border-blue-500"
+              }`}
+            />
+
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone Number"
+              value={formData.phone}
+              onChange={handleChange}
+              className={`w-full p-4 rounded-xl mb-5 outline-none transition ${
+                darkMode
+                  ? "bg-gray-800 border border-gray-600 text-white focus:border-blue-500"
+                  : "border border-gray-300 focus:border-blue-500"
+              }`}
+            />
+
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className={`w-full p-4 rounded-xl mb-5 ${
+                darkMode
+                  ? "bg-gray-800 border border-gray-600 text-white"
+                  : "border border-gray-300"
+              }`}
+            />
+
+            {file && (
+              <img
+                src={URL.createObjectURL(file)}
+                alt="preview"
+                className="w-36 h-36 rounded-full object-cover shadow-lg mb-6 border-4 border-blue-500"
+              />
+            )}
+
+            <button
+              onClick={handleUpdateProfile}
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:scale-[1.02] transition text-white font-bold text-lg"
+            >
+              Save Changes
+            </button>
+          </div>
+        )}
+
+        {/* Buttons */}
+
+        <div className="flex flex-wrap justify-center gap-5 mt-10">
+
+          <button
+            onClick={() => setIsEditing(!isEditing)}
+            className={`px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 ${
+              darkMode
+                ? "bg-gradient-to-r from-indigo-700 to-blue-700 text-white"
+                : "bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
+            }`}
+          >
+            {isEditing ? "Cancel" : "Edit Profile"}
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="px-8 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-700 hover:scale-105 transition-all duration-300 text-white font-semibold"
+          >
+            Logout
+          </button>
+
+        </div>
+
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default Profile;
